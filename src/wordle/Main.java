@@ -13,6 +13,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Wordle Project");
         stage.setScene(scene);
+        
         stage.show();
     }
 
