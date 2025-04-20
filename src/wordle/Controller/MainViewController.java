@@ -86,19 +86,20 @@ public class MainViewController implements Initializable {
 			currenttLetterIndex--;
 			row[attemptNumber][currenttLetterIndex].setText("");
 		} else if (key == KeyCode.ENTER && currenttLetterIndex == 5) {
-			submitGuess();
+			checkResult();
 		}
 	}
 
-	private void submitGuess() {
+	// main function of the game
+	private void checkResult() {
 		StringBuilder guessBuilder = new StringBuilder();
 		for (int i = 0; i < 5; i++) {
 			guessBuilder.append(row[attemptNumber][i].getText());
 		}
 
-		String guess = guessBuilder.toString().toUpperCase();
+		String guessLetter = guessBuilder.toString().toUpperCase();
 		// ignore empty guess like if the user presses space button
-		if (guess.length() != 5 || guess.contains(" ")) {
+		if (guessLetter.length() != 5 || guessLetter.contains(" ")) {
 			System.out.println("Guess must be 5 letters.");
 			return;
 		}
@@ -111,7 +112,7 @@ public class MainViewController implements Initializable {
 		// first try, correct position i.e green colour row
 		for (int i = 0; i < 5; i++) {
 			Label cell = row[attemptNumber][i];
-			char guessChar = guess.charAt(i);
+			char guessChar = guessLetter.charAt(i);
 
 			if (guessChar == targetChars[i]) {
 				cell.setStyle(correctStyle());
@@ -125,7 +126,7 @@ public class MainViewController implements Initializable {
 			if (guessMatched[i])
 				continue;
 			Label cell = row[attemptNumber][i];
-			char guessChar = guess.charAt(i);
+			char guessChar = guessLetter.charAt(i);
 			boolean wordFound = false;
 
 			for (int j = 0; j < 5; j++) {
@@ -142,7 +143,7 @@ public class MainViewController implements Initializable {
 			}
 		}
 		/// if the word is guessed correctly
-		if (guess.equals(wordTarget)) {
+		if (guessLetter.equals(wordTarget)) {
 			System.out.println(">>>>> you have guessed the word correctly " + (attemptNumber + 1) + " tries");
 			overGame = true;
 			return;
