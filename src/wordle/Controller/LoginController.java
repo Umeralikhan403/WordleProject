@@ -43,7 +43,7 @@ public class LoginController {
             try {
                 // 1. Load the FXML
                 FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/wordle/MainView.fxml")
+                    getClass().getResource("/wordle/View/MainView.fxml")
                 );
                 Parent mainRoot = loader.load();
 

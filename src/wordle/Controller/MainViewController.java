@@ -86,7 +86,95 @@ public class MainViewController implements Initializable {
 			currenttLetterIndex--;
 			row[attemptNumber][currenttLetterIndex].setText("");
 		} else if (key == KeyCode.ENTER && currenttLetterIndex == 5) {
+			submitGuess();
 		}
+	}
+
+	private void submitGuess() {
+		StringBuilder guessBuilder = new StringBuilder();
+		for (int i = 0; i < 5; i++) {
+			guessBuilder.append(row[attemptNumber][i].getText());
+		}
+
+		String guess = guessBuilder.toString().toUpperCase();
+		// ignore empty guess like if the user presses space button
+		if (guess.length() != 5 || guess.contains(" ")) {
+			System.out.println("Guess must be 5 letters.");
+			return;
+		}
+
+		String wordTarget = targettedWord.toUpperCase();
+		char[] targetChars = wordTarget.toCharArray();
+		boolean[] targetMatched = new boolean[5];
+		boolean[] guessMatched = new boolean[5];
+
+		// first try, correct position i.e green colour row
+		for (int i = 0; i < 5; i++) {
+			Label cell = row[attemptNumber][i];
+			char guessChar = guess.charAt(i);
+
+			if (guessChar == targetChars[i]) {
+				cell.setStyle(correctStyle());
+				targetMatched[i] = true;
+				guessMatched[i] = true;
+			}
+		}
+		
+		// second try — wrong position yellow row or all grey row if wrong
+		for (int i = 0; i < 5; i++) {
+			if (guessMatched[i])
+				continue;
+			Label cell = row[attemptNumber][i];
+			char guessChar = guess.charAt(i);
+			boolean wordFound = false;
+
+			for (int j = 0; j < 5; j++) {
+				if (!targetMatched[j] && guessChar == targetChars[j]) {
+					wordFound = true;
+					targetMatched[j] = true;
+					break;
+				}
+			}
+			if (wordFound) {
+				cell.setStyle(partialStyle());
+			} else {
+				cell.setStyle(wrongStyle());
+			}
+		}
+		/// if the word is guessed correctly
+		if (guess.equals(wordTarget)) {
+			System.out.println(">>>>> you have guessed the word correctly " + (attemptNumber + 1) + " tries");
+			overGame = true;
+			return;
+		}
+		/// move to the next attempt
+		attemptNumber++;
+		currenttLetterIndex = 0;
+		updateLettersSelected();
+
+		if (attemptNumber >= 6) {
+			System.out.println(">>>>>> game over, the correct word is " + wordTarget);
+			overGame = true;
+		}
+	}
+
+	// styling the rows based on the result
+	private String correctStyle() {
+		return "-fx-background-color: #209702; -fx-border-color: #209702; -fx-border-width: 2; "
+				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
+	}
+
+	private String partialStyle() {
+		return "-fx-background-color: #E2DA00; -fx-border-color: #E2DA00; -fx-border-width: 2; "
+				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
+	}
+
+	private String wrongStyle() {
+		return "-fx-background-color: #878787; -fx-border-color: #878787; -fx-border-width: 2; "
+				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
 	}
 
 }
