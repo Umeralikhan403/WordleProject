@@ -13,7 +13,6 @@ public class GameService {
 
 	public void loadWordsList() {
 		try {
-
 			InputStream in = getClass().getResourceAsStream("/wordle/Util/words.txt");
 			if (in == null) {
 				System.err.println(">>>>> ERROR: words.txt not found in resources!");
@@ -21,15 +20,25 @@ public class GameService {
 			}
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			wordsList = reader.lines().collect(Collectors.toList());
+			//// we need to filter the words i mean select a word that has 5 alphabets 
+			wordsList = reader.lines()
+				.map(String::trim)
+				.map(String::toLowerCase)
+				.filter(word -> word.length() == 5 && word.chars().allMatch(Character::isLetter))
+				.distinct()
+				.collect(Collectors.toList());
+
+			if (wordsList.isEmpty()) {
+				System.err.println(">>>>> error:: No 5-letter words found");
+				return;
+			}
 
 			Random rand = new Random();
 			targetWords = wordsList.get(rand.nextInt(wordsList.size())).toUpperCase();
 
-			System.out.println(">>>>> ** <<<<< DEBUG: Target word = " + targetWords); // Remove later
+			System.out.println(">>>>> word selected :: " + targetWords);
 		} catch (Exception e) {
-			// System.err.println(">>>>> ERROR: Failed to load words.txt. " +
-			// e.getMessage());
+			System.err.println(">>>>> ERROR: Failed file :: " + e.getMessage());
 		}
 	}
 
@@ -40,5 +49,4 @@ public class GameService {
 	public List<String> getWordsList() {
 		return wordsList;
 	}
-
 }
