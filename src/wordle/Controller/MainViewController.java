@@ -56,11 +56,35 @@ public class MainViewController implements Initializable {
 		updateLettersSelected();
 		
 		// Setup key grid input listener after scene is loaded
-		Platform.runLater(() -> {
-			row[0][0].getScene().setOnKeyPressed(event -> {
-				handleKeyPress(event.getCode());
-			});
-		});
+//		Platform.runLater(() -> {
+//			row[0][0].getScene().setOnKeyPressed(event -> {
+//				handleKeyPress(event.getCode());
+//			});
+//		});
+		
+	    // Setup key grid input listener after scene is loaded
+		// Code added to prevent menu from opening.
+		 Platform.runLater(() -> {
+		        Scene scene = row[0][0].getScene();
+		        
+		        // Explicitly set the menu button to not be a default button
+		        btnOpenMenu.setDefaultButton(false);
+		        btnOpenMenu.setCancelButton(false);
+		        
+		        // Set a scene filter to capture all key events at the scene level
+		        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+		            if (event.getCode() == KeyCode.ENTER) {
+		                // Always consume ENTER events to prevent them from triggering buttons
+		                event.consume();
+		                // Then manually handle what should happen with ENTER
+		                if (currenttLetterIndex == 5 && !overGame && attemptNumber < 6) {
+		                    checkResult();
+		                }
+		            } else {
+		                handleKeyPress(event.getCode());
+		            }
+		        });
+		    });
 	}
 
 	// Link all labels/cells to a 2D array
