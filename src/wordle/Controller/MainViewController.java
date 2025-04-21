@@ -1,12 +1,20 @@
 package wordle.Controller;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import wordle.Service.GameService;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,7 +32,8 @@ public class MainViewController implements Initializable {
 	private Label cell40, cell41, cell42, cell43, cell44;
 	@FXML
 	private Label cell50, cell51, cell52, cell53, cell54;
-
+	@FXML
+	private Button btnOpenMenu;
 	@FXML
 	private Label attemptLabel;
 	@FXML
@@ -144,7 +153,13 @@ public class MainViewController implements Initializable {
 		}
 		/// if the word is guessed correctly
 		if (guessLetter.equals(wordTarget)) {
-			System.out.println(">>>>> you have guessed the word correctly " + (attemptNumber + 1) + " tries");
+			System.out.println(">>>>> You have guessed the word correctly in " + (attemptNumber + 1) + " attempts.");
+			try {
+				openWinViewHandler(new ActionEvent());
+			} catch (Exception e) {
+				System.out.println(">>>>> Error loading winning screen.");
+				e.printStackTrace();
+			}
 			overGame = true;
 			return;
 		}
@@ -154,9 +169,37 @@ public class MainViewController implements Initializable {
 		updateLettersSelected();
 
 		if (attemptNumber >= 6) {
-			System.out.println(">>>>>> game over, the correct word is " + wordTarget);
+			System.out.println(">>>>>> Game over, the correct word is " + wordTarget);
+			try {
+				openLoseViewHandler(new ActionEvent());
+			} catch (Exception e) {
+				System.out.println(">>>>> Error loading losing screen.");
+				e.printStackTrace();
+			}
 			overGame = true;
 		}
+	}
+	
+	@FXML
+	private void openMenuHandler(ActionEvent e) throws IOException {
+		// Load the menu view
+		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
+        stage.setScene(new Scene(root));
+	}
+	
+	private void openWinViewHandler(ActionEvent e) throws IOException {
+		// Load the win view
+		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
+        stage.setScene(new Scene(root));
+	}
+	
+	private void openLoseViewHandler(ActionEvent e) throws IOException {
+		// Load the lose view
+		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
+        stage.setScene(new Scene(root));
 	}
 
 	// styling the rows based on the result

@@ -38,7 +38,7 @@ public class WinViewController {
 		try {
             //Load the FXML file.
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/wordle/MainView.fxml")
+                getClass().getResource("/wordle/View/MainView.fxml")
             );
             Parent mainRoot = loader.load();
 
@@ -48,7 +48,7 @@ public class WinViewController {
             //Change back to the game view.
             Scene mainScene = new Scene(mainRoot);
             stage.setScene(mainScene);
-            stage.setTitle("Wordle — Game"); 
+            stage.setTitle("Wordle — Main"); 
             stage.show();
         } catch (IOException ex) {
             ex.printStackTrace();
