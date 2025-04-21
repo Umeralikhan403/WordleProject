@@ -48,7 +48,7 @@
             <Font name="Futura Bold" size="36.0" />
           </font>
         </Label>
-            <Button fx:id="btnCloseMenu" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#closeMenuHandler" prefHeight="33.0" prefWidth="33.0" text="X">
+            <Button fx:id="btnCloseMenu" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#closeMenuHandler" prefHeight="33.0" prefWidth="33.0" style="-fx-background-color: #F4F4F4; -fx-border-color: #000000; -fx-border-radius: 20px;" text="X">
                <font>
                   <Font name="Futura Bold" size="18.0" />
                </font>

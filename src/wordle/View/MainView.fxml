@@ -23,7 +23,7 @@
 					</Label>
 				</center>
 				<left>
-					<Button fx:id="btnOpenMenu" mnemonicParsing="false" onAction="#openMenuHandler" text="≡" BorderPane.alignment="CENTER">
+					<Button fx:id="btnOpenMenu" mnemonicParsing="false" onAction="#openMenuHandler" text="≡" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 20px;" BorderPane.alignment="CENTER">
 						<BorderPane.margin>
 							<Insets left="10.0" />
 						</BorderPane.margin>
@@ -38,7 +38,7 @@
 			</BorderPane>
 			<Label style="-fx-text-fill: #000000;" text="Guess the word">
 				<font>
-					<Font size="16.0" />
+					<Font name="Futura Medium" size="16.0" />
 				</font>
 				<VBox.margin>
 					<Insets left="40.0" />
