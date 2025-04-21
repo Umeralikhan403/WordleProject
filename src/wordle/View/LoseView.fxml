@@ -40,7 +40,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wordle.Controller.WinViewController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
@@ -77,12 +77,12 @@
                   </VBox>
                   <HBox fx:id="buttonBox" alignment="CENTER" prefHeight="100.0" prefWidth="424.0" spacing="40.0">
                      <children>
-                        <Button fx:id="btnAgain" mnemonicParsing="false" style="-fx-background-color: green;" text="Play Again" textFill="WHITE">
+                        <Button fx:id="btnAgain" mnemonicParsing="false" onAction="#PlayAgainHandler" style="-fx-background-color: green;" text="Play Again" textFill="WHITE">
                            <font>
                               <Font name="Futura Bold" size="24.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnQuit" mnemonicParsing="false" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: red;" text="Quit" textFill="WHITE">
+                        <Button fx:id="btnQuit" mnemonicParsing="false" onAction="#QuitHandler" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: red;" text="Quit" textFill="WHITE">
                            <font>
                               <Font name="Futura Bold" size="24.0" />
                            </font>

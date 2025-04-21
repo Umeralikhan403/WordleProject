@@ -16,7 +16,7 @@
 		<VBox alignment="CENTER" spacing="5.0">
 			<Label text="Welcome back">
 				<font>
-					<Font name="System Bold" size="30" />
+					<Font name="Futura Bold" size="30" />
 				</font>
 			</Label>
 			<Label text="Please enter your details">
@@ -32,7 +32,7 @@
 			maxWidth="300">
 			<Label text="LOGIN">
 				<font>
-					<Font name="System Bold" size="20" />
+					<Font name="Futura Bold" size="20" />
 				</font>
 			</Label>
 
@@ -66,7 +66,7 @@
 				style="-fx-background-color: green; -fx-text-fill: white; -fx-font-weight: bold;" />
 			<Label text="Guest scores won’t save" textFill="gray">
 				<font>
-					<Font size="12" />
+					<Font name="Futura Medium" size="12" />
 				</font>
 			</Label>
 		</VBox>
