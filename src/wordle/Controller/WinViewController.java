@@ -9,7 +9,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import wordle.Util.AlertUtil;
 
@@ -17,7 +20,19 @@ public class WinViewController {
 
 	@FXML private Button btnAgain;
 	@FXML private Button btnQuit;
-	@FXML private TextArea lblAttempts;
+	//@FXML private TextArea lblAttempts;
+	@FXML private VBox box;
+	@FXML private VBox titleBox;
+	@FXML private Label lblCongrats;
+	@FXML private Label lblComplete;
+	@FXML private Label lblAttempts;
+	@FXML private HBox buttonBox;
+	
+	
+	@FXML private Label lblFailure;
+	@FXML private VBox againBox;
+	@FXML private Label lblAttemptsFailed;
+	@FXML private Label lblTryAgain;
 	
 	/**
 	 * This method is called when the view is loaded.

@@ -179,7 +179,8 @@ public class MainViewController implements Initializable {
 		if (guessLetter.equals(wordTarget)) {
 			System.out.println(">>>>> You have guessed the word correctly in " + (attemptNumber + 1) + " attempts.");
 			try {
-				openWinViewHandler(new ActionEvent());
+				//openWinViewHandler(new ActionEvent());
+				openWinViewHandler();
 			} catch (Exception e) {
 				System.out.println(">>>>> Error loading winning screen.");
 				e.printStackTrace();
@@ -195,7 +196,7 @@ public class MainViewController implements Initializable {
 		if (attemptNumber >= 6) {
 			System.out.println(">>>>>> Game over, the correct word is " + wordTarget);
 			try {
-				openLoseViewHandler(new ActionEvent());
+				openLoseViewHandler();
 			} catch (Exception e) {
 				System.out.println(">>>>> Error loading losing screen.");
 				e.printStackTrace();
@@ -212,23 +213,25 @@ public class MainViewController implements Initializable {
         stage.setScene(new Scene(root));
 	}
 	
-	private void openWinViewHandler(ActionEvent e) throws IOException {
-		// Load the win view
-		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
-        stage.setScene(new Scene(root));
+
+	
+	private void openWinViewHandler() throws IOException {
+	    // Load the win view using any node from the scene to get the stage
+	    Stage stage = (Stage) cell00.getScene().getWindow();
+	    Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
+	    stage.setScene(new Scene(root));
 	}
 	
-	private void openLoseViewHandler(ActionEvent e) throws IOException {
-		// Load the lose view
-		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
-        stage.setScene(new Scene(root));
+	private void openLoseViewHandler() throws IOException {
+	    // Load the lose view using any node from the scene to get the stage
+	    Stage stage = (Stage) cell00.getScene().getWindow();
+	    Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
+	    stage.setScene(new Scene(root));
 	}
 
 	// styling the rows based on the result
 	private String correctStyle() {
-		return "-fx-background-color: #209702; -fx-border-color: #209702; -fx-border-width: 2; "
+		return "-fx-background-color: #209702; -fx-openWinViewHandlerborder-color: #209702; -fx-border-width: 2; "
 				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
 				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
 	}
