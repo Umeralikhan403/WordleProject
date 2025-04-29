@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainViewController implements Initializable {
+public class WordleViewController implements Initializable {
 
 	@FXML
 	private Label cell00, cell01, cell02, cell03, cell04;

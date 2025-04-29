@@ -53,7 +53,7 @@ public class WinViewController {
 		try {
             //Load the FXML file.
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/wordle/View/MainView.fxml")
+                getClass().getResource("/wordle/View/WordleView.fxml")
             );
             Parent mainRoot = loader.load();
 

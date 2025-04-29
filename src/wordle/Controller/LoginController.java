@@ -24,8 +24,7 @@ public class LoginController {
     @FXML private Button registerButton;
     @FXML private Button guestButton;
 
-  
-
+ 
     /** Fired when the user clicks LOGIN */
     @FXML
     private void handleLogin(ActionEvent evt) {
@@ -43,7 +42,7 @@ public class LoginController {
             try {
                 // 1. Load the FXML
                 FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/wordle/View/MainView.fxml")
+                    getClass().getResource("/wordle/View/ChooseGameView.fxml")
                 );
                 Parent mainRoot = loader.load();
 
@@ -55,7 +54,7 @@ public class LoginController {
                 // 3. Swap in the new Scene
                 Scene mainScene = new Scene(mainRoot);
                 stage.setScene(mainScene);
-                stage.setTitle("Wordle — Main");    // optional: update window title
+                stage.setTitle("Wordle — Main");
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
