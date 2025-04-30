@@ -44,7 +44,7 @@ public class LoginController {
         	Player player = opt.get();
             Session.setCurrentPlayer(player);
             		
-            AlertUtil.info("Welcome", "Hello, " + user + "!");
+            //AlertUtil.info("Welcome", "Hello, " + user + "!");
             try {
                 // 1. Load the FXML
                 FXMLLoader loader = new FXMLLoader(

@@ -1,20 +1,25 @@
 package wordle.Controller;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import wordle.Service.Session;
 import wordle.Util.AlertUtil;
 
-public class MenuController {
+public class MenuController implements Initializable {
 
 	@FXML
 	private Button btnCloseMenu;
@@ -26,7 +31,19 @@ public class MenuController {
 	private Button btnSignOut;
 	@FXML
 	private Button btnQuit;
+   @FXML private Label helloLabel;
 
+   @Override
+	 public void initialize(URL location, ResourceBundle resources) {
+	        var player = Session.getCurrentPlayer();
+	        if (player != null) {
+	            helloLabel.setText("Hello, " + player.getUsername() + "!");
+	        } else {
+	            helloLabel.setText("Hello, Guest!");
+	        }
+	    }
+	 
+	 
 	@FXML
 	private void closeMenuHandler(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -36,7 +53,14 @@ public class MenuController {
 
 	@FXML
 	private void viewScoresHandler(ActionEvent e) {
-		AlertUtil.info("Scores", "No scores to display.");
+		try {
+			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/StatisticsView.fxml"));
+			stage.setScene(new Scene(root));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			AlertUtil.warn("Navigation Error", "Statistics failed to load.");
+		}
 	}
 
 	@FXML
