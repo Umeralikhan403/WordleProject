@@ -2,6 +2,8 @@ package wordle.Models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Player implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -9,15 +11,13 @@ public class Player implements Serializable {
     
 	private String username;
 	private String password;
-	private int highScore;
-	private ArrayList<Integer> scores;
+	 private List<GameResult> history = new ArrayList<>();
+	 private double totalScore = 0;
 	
 	
 	public Player(String username, String password) {
         this.username = username;
         this.password = password;
-        this.highScore = 0;
-        this.scores = new ArrayList<>();
     }
 	
 	
@@ -33,23 +33,38 @@ public class Player implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getHighScore() {
-		return highScore;
-	}
-	public void setHighScore(int highScore) {
-		this.highScore = highScore;
-	}
-	public ArrayList<Integer> getScores() {
-		return scores;
-	}
-	public void setScores(ArrayList<Integer> scores) {
-		this.scores = scores;
-	}
 	
-	public void addScoreToList(int score) {
-		this.scores.add(score);
-	}
-	
+
+    public List<GameResult> getHistory() {
+        if (history == null) {
+            history = new ArrayList<>();
+        }
+        return Collections.unmodifiableList(history);
+    }
+
+    public void addGameResult(GameResult result) {
+        if (history == null) {
+            history = new ArrayList<>();
+        }
+        history.add(result);
+        totalScore += result.getScore();
+    }
+
+
+    public double getHighScore() {
+        return history.stream()
+                      .mapToDouble(GameResult::getScore)
+                      .max()
+                      .orElse(0);
+    }
+
+    public double getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(double totalScore) {
+        this.totalScore = totalScore;
+    }
 	
 	
 

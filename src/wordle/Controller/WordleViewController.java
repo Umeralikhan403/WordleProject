@@ -12,7 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import wordle.Models.GameResult;
+import wordle.Models.GameStatus;
+import wordle.Models.Player;
 import wordle.Service.GameService;
+import wordle.Service.PlayerRepository;
+import wordle.Service.Session;
 
 import java.io.IOException;
 import java.net.URL;
@@ -180,6 +185,8 @@ public class WordleViewController implements Initializable {
 			System.out.println(">>>>> You have guessed the word correctly in " + (attemptNumber + 1) + " attempts.");
 			try {
 				//openWinViewHandler(new ActionEvent());
+				//Score results
+				recordAndPersistResult(true);
 				openWinViewHandler();
 			} catch (Exception e) {
 				System.out.println(">>>>> Error loading winning screen.");
@@ -196,6 +203,8 @@ public class WordleViewController implements Initializable {
 		if (attemptNumber >= 6) {
 			System.out.println(">>>>>> Game over, the correct word is " + wordTarget);
 			try {
+				//Score results
+				recordAndPersistResult(false);
 				openLoseViewHandler();
 			} catch (Exception e) {
 				System.out.println(">>>>> Error loading losing screen.");
@@ -227,6 +236,18 @@ public class WordleViewController implements Initializable {
 	    Stage stage = (Stage) cell00.getScene().getWindow();
 	    Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
 	    stage.setScene(new Scene(root));
+	}
+	
+	//Recording scores
+	private void recordAndPersistResult(boolean won) {
+	    Player me = Session.getCurrentPlayer();
+	    // attemptsUsed = attemptNumber+1 if you zero-index attempts
+	    int used = attemptNumber + 1;
+	    GameStatus status = won ? GameStatus.WON : GameStatus.FAILED;
+	    GameResult result = new GameResult(targettedWord, 6, used, status);
+
+	    me.addGameResult(result);
+	    PlayerRepository.updatePlayer(me);
 	}
 
 	// styling the rows based on the result

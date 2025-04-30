@@ -10,7 +10,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import wordle.Models.Player;
 import wordle.Service.PlayerRepository;
+import wordle.Service.Session;
 import wordle.Util.AlertUtil;
 
 import java.io.*;
@@ -29,16 +31,20 @@ public class LoginController {
     @FXML
     private void handleLogin(ActionEvent evt) {
     	PlayerRepository.printPlayers();
-        var user = usernameField.getText().trim();
-        var pass = passwordField.getText().trim();
+        String user = usernameField.getText().trim();
+        String pass = passwordField.getText().trim();
         if (user.isEmpty() || pass.isEmpty()) {
             AlertUtil.warn("Input Error", "Username and Password must not be empty.");
             return;
         }
 
-        if (PlayerRepository.authenticate(user, pass).isPresent()) {
+        var opt = PlayerRepository.authenticate(user, pass);
+        if (opt.isPresent()) {
+        	//Store the login player into session!
+        	Player player = opt.get();
+            Session.setCurrentPlayer(player);
+            		
             AlertUtil.info("Welcome", "Hello, " + user + "!");
-            // TODO: switch to your main/game view
             try {
                 // 1. Load the FXML
                 FXMLLoader loader = new FXMLLoader(

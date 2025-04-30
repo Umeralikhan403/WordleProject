@@ -32,7 +32,7 @@ public class ChooseGameController {
 	@FXML
 	private void startNerdle(ActionEvent event) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/nerdle/View/NerdleView.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/NerdleView.fxml"));
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.setScene(new Scene(root));
 			stage.show();
