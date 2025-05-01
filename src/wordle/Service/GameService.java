@@ -16,7 +16,7 @@ public class GameService {
 
     private final Random random = new Random();
 
-    // ------------------- WORDLE METHODS ---------------------------
+    //// WORDLE METHODS
 
     public void loadWordsList() {
         try {
@@ -55,8 +55,9 @@ public class GameService {
         return wordsList;
     }
 
-    // ------------------- NERDLE METHODS ---------------------------
-
+    
+    
+    //// NERDLE METHODS
     // Load equations from file
     public void loadEquationsList() {
         try {
@@ -106,10 +107,10 @@ public class GameService {
 
             if (result == null) return false;
 
-            int calculatedValue = (int) Math.round(Double.parseDouble(result.toString()));
-            int userRightValue = Integer.parseInt(rightPart);
+            int calculatedVal = (int) Math.round(Double.parseDouble(result.toString()));
+            int userRightVal = Integer.parseInt(rightPart);
 
-            return calculatedValue == userRightValue;
+            return calculatedVal == userRightVal;
 
         } catch (Exception e) {
             return false;
