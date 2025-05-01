@@ -56,22 +56,28 @@ public class GameService {
 
 	//// Nerdle game code starts here
 	public String equationGeneration() {
-	        while (true) {
-	            String left = generateLeftExp();
-	            try {
-	                Object result = engine.eval(left);
-	                if (result instanceof Number) {
-	                    int answer = (int) Math.round(Double.parseDouble(result.toString()));
-	                    String equation = left + "=" + answer;
-	                    if (equation.length() == 8 && equation.matches("^[0-9+\\-*/=]+$")) {
-	                        return equation;
-	                    }
+	    long startTime = System.currentTimeMillis();
+
+	    while (true) {
+	        String left = generateLeftExp();
+	        try {
+	            Object result = engine.eval(left);
+	            if (result instanceof Number) {
+	                int answer = (int) Math.round(Double.parseDouble(result.toString()));
+	                String equation = left + "=" + answer;
+	                if (equation.length() == 8 && equation.matches("^[0-9+\\-*/=]+$")) {
+	                    return equation;
 	                }
-	            } catch (Exception ignored) {
-	                
 	            }
+	        } catch (Exception ignored) {}
+
+	        // Fail-safe timeout after 5 seconds
+	        if (System.currentTimeMillis() - startTime > 5000) {
+	            return "1+2+3=6"; // Default fallback
 	        }
 	    }
+	}
+
 
 	private String generateLeftExp() {
 		int length = random.nextInt(3) + 3;

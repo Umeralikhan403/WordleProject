@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import wordle.Service.GameService;
 
@@ -20,6 +19,7 @@ import java.util.ResourceBundle;
 
 public class NerdleController implements Initializable {
 
+	// labelling the grids
 	@FXML
 	private Label cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07;
 	@FXML
@@ -32,213 +32,207 @@ public class NerdleController implements Initializable {
 	private Label cell40, cell41, cell42, cell43, cell44, cell45, cell46, cell47;
 	@FXML
 	private Label cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57;
-	
-	
+
 	@FXML
 	private Button btnOpenMenu;
 	@FXML
 	private Label attemptLabel;
 	@FXML
 	private Label remainingAttemptsLabel;
-	private final Label[][] row = new Label[6][5];
+
+	// game variables
+	private final Label[][] row = new Label[6][8]; // The grid (6 rows x 8 columns)
 	private int attemptNumber = 0;
-	private int currenttLetterIndex = 0;
+	private int currentDigitIndex = 0;
 	private final GameService gameService = new GameService();
-	private String targettedWord;
-	private boolean overGame = false;
+	private String targetEquation;
+	private boolean gameOver = false;
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-		// first we have to load the list of words
-		gameService.loadWordsList();
-		targettedWord = gameService.getTargetWords();
-		System.out.println(">>>>> Targetted Word: " + targettedWord);
 
-		setupRows();
-		updateLettersSelected();
-		 Platform.runLater(() -> {
-		        Scene scene = row[0][0].getScene();
-		        
-		        // Explicitly set the menu button to not be a default button
-		        btnOpenMenu.setDefaultButton(false);
-		        btnOpenMenu.setCancelButton(false);
-		        
-		        // Set a scene filter to capture all key events at the scene level
-		        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-		            if (event.getCode() == KeyCode.ENTER) {
-		                // Always consume ENTER events to prevent them from triggering buttons
-		                event.consume();
-		                // Then manually handle what should happen with ENTER
-		                if (currenttLetterIndex == 5 && !overGame && attemptNumber < 6) {
-		                    checkResult();
-		                }
-		            } else {
-		                handleKeyPress(event.getCode());
-		            }
-		        });
-		    });
+		// generate the equation in background
+		new Thread(() -> {
+			String equation = gameService.equationGeneration();
+			Platform.runLater(() -> {
+				targetEquation = equation;
+				System.out.println(">>>>> Targetted Equation: " + targetEquation);
+
+				setupRows();
+				updateAttemptNumber();
+
+				Scene scene = row[0][0].getScene();
+				btnOpenMenu.setDefaultButton(false);
+				btnOpenMenu.setCancelButton(false);
+
+			
+				scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_TYPED, event -> {
+					String keyText = event.getCharacter();
+
+					// when the enter is pressed, check the result
+					if (keyText.equals("\r") || keyText.equals("\n")) {
+						event.consume();
+						if (currentDigitIndex == 8 && !gameOver && attemptNumber < 6) {
+							resultCheck();
+						}
+					}
+					
+					// BackSpace key -> remove the last digit entered 
+					else if (keyText.equals("\b")) {
+						if (currentDigitIndex > 0) {
+							currentDigitIndex--;
+							row[attemptNumber][currentDigitIndex].setText("");
+						}
+					}
+					// Valid key (numbers, operators, equal sign) -> Add to grid
+					else if ("0123456789+-*/=".contains(keyText) && currentDigitIndex < 8) {
+						row[attemptNumber][currentDigitIndex].setText(keyText);
+						currentDigitIndex++;
+					}
+				});
+			});
+		}).start();
 	}
 
-	// Link all labels/cells to a 2D array
+	// linking all the labels to the grids
 	private void setupRows() {
-	    row[0] = new Label[] { cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07 };
-	    row[1] = new Label[] { cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17 };
-	    row[2] = new Label[] { cell20, cell21, cell22, cell23, cell24, cell25, cell26, cell27 };
-	    row[3] = new Label[] { cell30, cell31, cell32, cell33, cell34, cell35, cell36, cell37 };
-	    row[4] = new Label[] { cell40, cell41, cell42, cell43, cell44, cell45, cell46, cell47 };
-	    row[5] = new Label[] { cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57 };
+		row[0] = new Label[] { cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07 };
+		row[1] = new Label[] { cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17 };
+		row[2] = new Label[] { cell20, cell21, cell22, cell23, cell24, cell25, cell26, cell27 };
+		row[3] = new Label[] { cell30, cell31, cell32, cell33, cell34, cell35, cell36, cell37 };
+		row[4] = new Label[] { cell40, cell41, cell42, cell43, cell44, cell45, cell46, cell47 };
+		row[5] = new Label[] { cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57 };
 	}
 
-	// Update attempt text
-	private void updateLettersSelected() {
+	// update the number of attempts
+	private void updateAttemptNumber() {
 		attemptLabel.setText((attemptNumber + 1) + "/6");
 		int rem = 6 - attemptNumber;
 		remainingAttemptsLabel.setText(rem + " attempt" + (rem > 1 ? "s" : "") + " remaining");
 	}
 
-	// Next step will go here — handleKeyPress
-	private void handleKeyPress(KeyCode key) {
-		System.out.println(">>>>> key handling : " + key + ", attempt no. " + attemptNumber + ", letter index is: "
-				+ currenttLetterIndex);
-		if (attemptNumber >= 6 || overGame)
-			return;
-
-		if (key.isLetterKey() && currenttLetterIndex < 5) {
-			String alphabet = key.getName().toUpperCase();
-			row[attemptNumber][currenttLetterIndex].setText(alphabet);
-			currenttLetterIndex++;
-		} else if (key == KeyCode.BACK_SPACE && currenttLetterIndex > 0) {
-			currenttLetterIndex--;
-			row[attemptNumber][currenttLetterIndex].setText("");
-		} else if (key == KeyCode.ENTER && currenttLetterIndex == 5) {
-			checkResult();
-		}
-	}
-
-	// main function of the game
-	private void checkResult() {
+	// checking and comparing the results
+	private void resultCheck() {
 		StringBuilder guessBuilder = new StringBuilder();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 8; i++) {
 			guessBuilder.append(row[attemptNumber][i].getText());
 		}
 
-		String guessLetter = guessBuilder.toString().toUpperCase();
-		// ignore empty guess like if the user presses space button
-		if (guessLetter.length() != 5 || guessLetter.contains(" ")) {
-			System.out.println("Guess must be 5 letters.");
+		String guessEquation = guessBuilder.toString();
+
+		// Validate equation
+		if (guessEquation.length() != 8 || !gameService.isValidEquation(guessEquation)) {
+			System.out.println("Invalid equation!");
+
+			for (int i = 0; i < 8; i++) {
+				row[attemptNumber][i]
+						.setStyle("-fx-background-color: #FF5C5C; -fx-border-color: #FF0000; -fx-border-width: 2; "
+								+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+								+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;");
+			}
 			return;
 		}
 
-		String wordTarget = targettedWord.toUpperCase();
-		char[] targetChars = wordTarget.toCharArray();
-		boolean[] targetMatched = new boolean[5];
-		boolean[] guessMatched = new boolean[5];
-
-		// first try, correct position i.e green colour row
-		for (int i = 0; i < 5; i++) {
+		String target = targetEquation;
+		char[] targetChars = target.toCharArray();
+		boolean[] targetMatched = new boolean[8];
+		boolean[] guessMatched = new boolean[8];
+		for (int i = 0; i < 8; i++) {
 			Label cell = row[attemptNumber][i];
-			char guessChar = guessLetter.charAt(i);
-
-			if (guessChar == targetChars[i]) {
+			char guessDigit = guessEquation.charAt(i);
+			if (guessDigit == targetChars[i]) {
 				cell.setStyle(correctStyle());
 				targetMatched[i] = true;
 				guessMatched[i] = true;
 			}
 		}
-		
-		// second try — wrong position yellow row or all grey row if wrong
-		for (int i = 0; i < 5; i++) {
+
+		// Check wrong positions or not found
+		for (int i = 0; i < 8; i++) {
 			if (guessMatched[i])
 				continue;
-			Label cell = row[attemptNumber][i];
-			char guessChar = guessLetter.charAt(i);
-			boolean wordFound = false;
 
-			for (int j = 0; j < 5; j++) {
-				if (!targetMatched[j] && guessChar == targetChars[j]) {
-					wordFound = true;
+			Label cell = row[attemptNumber][i];
+			char guessDigit = guessEquation.charAt(i);
+			boolean found = false;
+
+			for (int j = 0; j < 8; j++) {
+				if (!targetMatched[j] && guessDigit == targetChars[j]) {
+					found = true;
 					targetMatched[j] = true;
 					break;
 				}
 			}
-			if (wordFound) {
-				cell.setStyle(partialStyle());
-			} else {
-				cell.setStyle(wrongStyle());
-			}
+
+			cell.setStyle(found ? partialStyle() : wrongStyle());
 		}
-		/// if the word is guessed correctly
-		if (guessLetter.equals(wordTarget)) {
-			System.out.println(">>>>> You have guessed the word correctly in " + (attemptNumber + 1) + " attempts.");
+
+		// win equation here
+		if (guessEquation.equals(target)) {
+			System.out.println(">>>>> You win!");
 			try {
-				//openWinViewHandler(new ActionEvent());
 				openWinViewHandler();
 			} catch (Exception e) {
-				System.out.println(">>>>> Error loading winning screen.");
 				e.printStackTrace();
 			}
-			overGame = true;
+			gameOver = true;
 			return;
 		}
-		/// move to the next attempt
+
+		// next attempt 
 		attemptNumber++;
-		currenttLetterIndex = 0;
-		updateLettersSelected();
+		currentDigitIndex = 0;
+		updateAttemptNumber();
 
 		if (attemptNumber >= 6) {
-			System.out.println(">>>>>> Game over, the correct word is " + wordTarget);
+			System.out.println("You lose! Correct answer was: " + target);
 			try {
 				openLoseViewHandler();
 			} catch (Exception e) {
-				System.out.println(">>>>> Error loading losing screen.");
 				e.printStackTrace();
 			}
-			overGame = true;
+			gameOver = true;
 		}
 	}
-	
+
+	// loading the menu
 	@FXML
 	private void openMenuHandler(ActionEvent e) throws IOException {
-		// Load the menu view
-		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
-        stage.setScene(new Scene(root));
+		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
+		stage.setScene(new Scene(root));
 	}
-	
 
-	
+	// Load Win view
 	private void openWinViewHandler() throws IOException {
-	    // Load the win view using any node from the scene to get the stage
-	    Stage stage = (Stage) cell00.getScene().getWindow();
-	    Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
-	    stage.setScene(new Scene(root));
-	}
-	
-	private void openLoseViewHandler() throws IOException {
-	    // Load the lose view using any node from the scene to get the stage
-	    Stage stage = (Stage) cell00.getScene().getWindow();
-	    Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
-	    stage.setScene(new Scene(root));
+		Stage stage = (Stage) cell00.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
+		stage.setScene(new Scene(root));
 	}
 
-	// Styling the rows based on the Nerdle color scheme
+	// Load Lose view
+	private void openLoseViewHandler() throws IOException {
+		Stage stage = (Stage) cell00.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
+		stage.setScene(new Scene(root));
+	}
+
+	
 	private String correctStyle() {
-	    return "-fx-background-color: #5AC85A; -fx-border-color: #5AC85A; -fx-border-width: 2; "
-	         + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
-	         + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
+		return "-fx-background-color: #5AC85A; -fx-border-color: #5AC85A; -fx-border-width: 2; "
+				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
 	}
 
 	private String partialStyle() {
-	    return "-fx-background-color: #B79AFD; -fx-border-color: #B79AFD; -fx-border-width: 2; "
-	         + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
-	         + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
+		return "-fx-background-color: #B79AFD; -fx-border-color: #B79AFD; -fx-border-width: 2; "
+				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
 	}
 
 	private String wrongStyle() {
-	    return "-fx-background-color: #7C7C7C; -fx-border-color: #7C7C7C; -fx-border-width: 2; "
-	         + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
-	         + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
+		return "-fx-background-color: #7C7C7C; -fx-border-color: #7C7C7C; -fx-border-width: 2; "
+				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
 	}
-
-
 }

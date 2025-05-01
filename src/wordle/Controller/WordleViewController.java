@@ -59,37 +59,37 @@ public class WordleViewController implements Initializable {
 
 		setupRows();
 		updateLettersSelected();
-		
+
 		// Setup key grid input listener after scene is loaded
 //		Platform.runLater(() -> {
 //			row[0][0].getScene().setOnKeyPressed(event -> {
 //				handleKeyPress(event.getCode());
 //			});
 //		});
-		
-	    // Setup key grid input listener after scene is loaded
+
+		// Setup key grid input listener after scene is loaded
 		// Code added to prevent menu from opening.
-		 Platform.runLater(() -> {
-		        Scene scene = row[0][0].getScene();
-		        
-		        // Explicitly set the menu button to not be a default button
-		        btnOpenMenu.setDefaultButton(false);
-		        btnOpenMenu.setCancelButton(false);
-		        
-		        // Set a scene filter to capture all key events at the scene level
-		        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-		            if (event.getCode() == KeyCode.ENTER) {
-		                // Always consume ENTER events to prevent them from triggering buttons
-		                event.consume();
-		                // Then manually handle what should happen with ENTER
-		                if (currenttLetterIndex == 5 && !overGame && attemptNumber < 6) {
-		                    checkResult();
-		                }
-		            } else {
-		                handleKeyPress(event.getCode());
-		            }
-		        });
-		    });
+		Platform.runLater(() -> {
+			Scene scene = row[0][0].getScene();
+
+			// Explicitly set the menu button to not be a default button
+			btnOpenMenu.setDefaultButton(false);
+			btnOpenMenu.setCancelButton(false);
+
+			// Set a scene filter to capture all key events at the scene level
+			scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+				if (event.getCode() == KeyCode.ENTER) {
+					// Always consume ENTER events to prevent them from triggering buttons
+					event.consume();
+					// Then manually handle what should happen with ENTER
+					if (currenttLetterIndex == 5 && !overGame && attemptNumber < 6) {
+						checkResult();
+					}
+				} else {
+					handleKeyPress(event.getCode());
+				}
+			});
+		});
 	}
 
 	// Link all labels/cells to a 2D array
@@ -158,7 +158,7 @@ public class WordleViewController implements Initializable {
 				guessMatched[i] = true;
 			}
 		}
-		
+
 		// second try — wrong position yellow row or all grey row if wrong
 		for (int i = 0; i < 5; i++) {
 			if (guessMatched[i])
@@ -184,8 +184,8 @@ public class WordleViewController implements Initializable {
 		if (guessLetter.equals(wordTarget)) {
 			System.out.println(">>>>> You have guessed the word correctly in " + (attemptNumber + 1) + " attempts.");
 			try {
-				//openWinViewHandler(new ActionEvent());
-				//Score results
+				// openWinViewHandler(new ActionEvent());
+				// Score results
 				recordAndPersistResult(true);
 				openWinViewHandler();
 			} catch (Exception e) {
@@ -203,7 +203,7 @@ public class WordleViewController implements Initializable {
 		if (attemptNumber >= 6) {
 			System.out.println(">>>>>> Game over, the correct word is " + wordTarget);
 			try {
-				//Score results
+				// Score results
 				recordAndPersistResult(false);
 				openLoseViewHandler();
 			} catch (Exception e) {
@@ -213,41 +213,39 @@ public class WordleViewController implements Initializable {
 			overGame = true;
 		}
 	}
-	
+
 	@FXML
 	private void openMenuHandler(ActionEvent e) throws IOException {
 		// Load the menu view
-		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
-        stage.setScene(new Scene(root));
+		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
+		stage.setScene(new Scene(root));
 	}
-	
 
-	
 	private void openWinViewHandler() throws IOException {
-	    // Load the win view using any node from the scene to get the stage
-	    Stage stage = (Stage) cell00.getScene().getWindow();
-	    Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
-	    stage.setScene(new Scene(root));
+		// Load the win view using any node from the scene to get the stage
+		Stage stage = (Stage) cell00.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
+		stage.setScene(new Scene(root));
 	}
-	
-	private void openLoseViewHandler() throws IOException {
-	    // Load the lose view using any node from the scene to get the stage
-	    Stage stage = (Stage) cell00.getScene().getWindow();
-	    Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
-	    stage.setScene(new Scene(root));
-	}
-	
-	//Recording scores
-	private void recordAndPersistResult(boolean won) {
-	    Player me = Session.getCurrentPlayer();
-	    // attemptsUsed = attemptNumber+1 if you zero-index attempts
-	    int used = attemptNumber + 1;
-	    GameStatus status = won ? GameStatus.WON : GameStatus.FAILED;
-	    GameResult result = new GameResult(targettedWord, 6, used, status);
 
-	    me.addGameResult(result);
-	    PlayerRepository.updatePlayer(me);
+	private void openLoseViewHandler() throws IOException {
+		// Load the lose view using any node from the scene to get the stage
+		Stage stage = (Stage) cell00.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
+		stage.setScene(new Scene(root));
+	}
+
+	// Recording scores
+	private void recordAndPersistResult(boolean won) {
+		Player me = Session.getCurrentPlayer();
+		// attemptsUsed = attemptNumber+1 if you zero-index attempts
+		int used = attemptNumber + 1;
+		GameStatus status = won ? GameStatus.WON : GameStatus.FAILED;
+		GameResult result = new GameResult(targettedWord, 6, used, status);
+
+		me.addGameResult(result);
+		PlayerRepository.updatePlayer(me);
 	}
 
 	// styling the rows based on the result
