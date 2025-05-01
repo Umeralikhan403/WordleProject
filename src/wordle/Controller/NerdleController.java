@@ -92,7 +92,7 @@ public class NerdleController implements Initializable {
         }).start();
     }
 
-    private void setupRows() {
+    private void setupRows()  {
         row[0] = new Label[] { cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07 };
         row[1] = new Label[] { cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17 };
         row[2] = new Label[] { cell20, cell21, cell22, cell23, cell24, cell25, cell26, cell27 };
