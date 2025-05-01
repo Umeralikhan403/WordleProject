@@ -7,115 +7,112 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 public class GameService {
-	private String targetWords;
-	private List<String> wordsList;
 
-	private final Random random = new Random();
-	private static final char[] OPERATORS = { '+', '-', '*', '/' };
-	private static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
+    private String targetWords;
+    private List<String> wordsList;
+    private List<String> equationList;
+    private String targetEquation;
 
-	public void loadWordsList() {
-		try {
-			InputStream in = getClass().getResourceAsStream("/wordle/Util/words.txt");
-			if (in == null) {
-				System.err.println(">>>>> ERROR: words.txt not found in resources!");
-				return;
-			}
+    private final Random random = new Random();
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			//// we need to filter the words i mean select a word that has 5 alphabets
-			wordsList = reader.lines().map(String::trim).map(String::toLowerCase)
-					.filter(word -> word.length() == 5 && word.chars().allMatch(Character::isLetter)).distinct()
-					.collect(Collectors.toList());
+    // ------------------- WORDLE METHODS ---------------------------
 
-			if (wordsList.isEmpty()) {
-				System.err.println(">>>>> error:: No 5-letter words found");
-				return;
-			}
+    public void loadWordsList() {
+        try {
+            InputStream in = getClass().getResourceAsStream("/wordle/Util/words.txt");
+            if (in == null) {
+                System.err.println(">>>>> ERROR: words.txt not found in resources!");
+                return;
+            }
 
-			Random rand = new Random();
-			targetWords = wordsList.get(rand.nextInt(wordsList.size())).toUpperCase();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            wordsList = reader.lines()
+                    .map(String::trim)
+                    .map(String::toLowerCase)
+                    .filter(word -> word.length() == 5 && word.chars().allMatch(Character::isLetter))
+                    .distinct()
+                    .collect(Collectors.toList());
 
-			System.out.println(">>>>> word selected :: " + targetWords);
-		} catch (Exception e) {
-			System.err.println(">>>>> ERROR: Failed file :: " + e.getMessage());
-		}
-	}
+            if (wordsList.isEmpty()) {
+                System.err.println(">>>>> ERROR: No valid 5-letter words found!");
+                return;
+            }
 
-	public String getTargetWords() {
-		return targetWords;
-	}
+            targetWords = wordsList.get(random.nextInt(wordsList.size())).toUpperCase();
+            System.out.println(">>>>> Word selected for Wordle: " + targetWords);
 
-	public List<String> getWordsList() {
-		return wordsList;
-	}
+        } catch (Exception e) {
+            System.err.println(">>>>> ERROR loading words.txt: " + e.getMessage());
+        }
+    }
 
-	//// Nerdle game code starts here
-	public String equationGeneration() {
-	    long startTime = System.currentTimeMillis();
+    public String getTargetWords() {
+        return targetWords;
+    }
 
-	    while (true) {
-	        String left = generateLeftExp();
-	        try {
-	            Object result = engine.eval(left);
-	            if (result instanceof Number) {
-	                int answer = (int) Math.round(Double.parseDouble(result.toString()));
-	                String equation = left + "=" + answer;
-	                if (equation.length() == 8 && equation.matches("^[0-9+\\-*/=]+$")) {
-	                    return equation;
-	                }
-	            }
-	        } catch (Exception ignored) {}
+    public List<String> getWordsList() {
+        return wordsList;
+    }
 
-	        // Fail-safe timeout after 5 seconds
-	        if (System.currentTimeMillis() - startTime > 5000) {
-	            return "1+2+3=6"; // Default fallback
-	        }
-	    }
-	}
+    // ------------------- NERDLE METHODS ---------------------------
 
+    // Load equations from file
+    public void loadEquationsList() {
+        try {
+            InputStream in = getClass().getResourceAsStream("/wordle/Util/nerdle_equations.txt");
+            if (in == null) {
+                System.err.println(">>>>> ERROR: nerdle_equations.txt not found!");
+                return;
+            }
 
-	private String generateLeftExp() {
-		int length = random.nextInt(3) + 3;
-		StringBuilder sb = new StringBuilder();
-		boolean lastOperator = false;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            equationList = reader.lines()
+                    .map(String::trim)
+                    .filter(line -> line.length() == 8 && line.matches("^[0-9+\\-*/=]+$"))
+                    .collect(Collectors.toList());
 
-		while (sb.length() < length) {
-			if (lastOperator) {
-				sb.append(random.nextInt(10));
-				lastOperator = false;
-			} else {
-				if (sb.length() == 0 || random.nextBoolean()) {
-					sb.append(random.nextInt(10));
-				} else {
-					char op = OPERATORS[random.nextInt(OPERATORS.length)];
-					sb.append(op);
-					lastOperator = true;
-				}
-			}
-		}
-		return sb.toString().replaceAll("[/*]-", "");
-	}
+            if (equationList.isEmpty()) {
+                System.err.println(">>>>> ERROR: No valid equations found in file.");
+                return;
+            }
 
-	public boolean isValidEquation(String input) {
-		if (!input.contains("="))
-			return false;
-		String[] parts = input.split("=");
-		if (parts.length != 2)
-			return false;
+            targetEquation = equationList.get(random.nextInt(equationList.size()));
+            System.out.println(">>>>> Targetted Equation: " + targetEquation);
 
-		try {
-			Object results = engine.eval(parts[0]);
-			int eval = (int) Math.round(Double.parseDouble(results.toString()));
-			int providedInt = Integer.parseInt(parts[1]);
-			return eval == providedInt;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+        } catch (Exception e) {
+            System.err.println(">>>>> ERROR loading nerdle_equations.txt: " + e.getMessage());
+        }
+    }
 
+    public String getTargetEquation() {
+        return targetEquation;
+    }
+
+    // Validate equation by evaluating left side and comparing with right side (Correct validation)
+    public boolean isValidEquation(String input) {
+
+        if (input == null || !input.contains("=")) return false;
+
+        String[] parts = input.split("=");
+
+        if (parts.length != 2) return false;
+
+        String leftPart = parts[0];
+        String rightPart = parts[1];
+
+        try {
+            Object result = new javax.script.ScriptEngineManager().getEngineByName("JavaScript").eval(leftPart);
+
+            if (result == null) return false;
+
+            int calculatedValue = (int) Math.round(Double.parseDouble(result.toString()));
+            int userRightValue = Integer.parseInt(rightPart);
+
+            return calculatedValue == userRightValue;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
