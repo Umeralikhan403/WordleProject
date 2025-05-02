@@ -31,18 +31,17 @@ public class MenuController implements Initializable {
 	private Button btnSignOut;
 	@FXML
 	private Button btnQuit;
-   @FXML private Label helloLabel;
+	@FXML private Label helloLabel;
 
-   @Override
-	 public void initialize(URL location, ResourceBundle resources) {
-	        var player = Session.getCurrentPlayer();
-	        if (player != null) {
-	            helloLabel.setText("Hello, " + player.getUsername() + "!");
-	        } else {
-	            helloLabel.setText("Hello, Guest!");
-	        }
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+	    var player = Session.getCurrentPlayer();
+	    if (player != null) {
+	        helloLabel.setText("Hello, " + player.getUsername() + "!");
+	    } else {
+	    	helloLabel.setText("Hello, Guest!");
 	    }
-	 
+	}
 	 
 	@FXML
 	private void closeMenuHandler(ActionEvent e) throws IOException {
@@ -65,8 +64,14 @@ public class MenuController implements Initializable {
 
 	@FXML
 	private void resetScoresHandler(ActionEvent e) {
-		alertDialogBuilder(AlertType.CONFIRMATION, "Reset Scores", "Confirmation",
+		 alertDialogBuilder(AlertType.CONFIRMATION, "Reset Scores", "Confirmation",
 				"Are you sure you want to reset the scores?");
+		if (Session.getCurrentPlayer() != null) {
+			Session.getCurrentPlayer().resetScores();
+			AlertUtil.info("Reset Scores", "Scores have been reset.");
+		} else {
+			AlertUtil.warn("Reset Scores", "No player is currently logged in.");
+		}
 	}
 
 	@FXML
@@ -87,6 +92,10 @@ public class MenuController implements Initializable {
 		// Close the application
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		stage.close();
+	}
+	
+	private void getCurrentGame() {
+		
 	}
 
 	// helper method to build dialogs

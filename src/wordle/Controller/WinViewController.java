@@ -1,26 +1,27 @@
 package wordle.Controller;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import wordle.Util.AlertUtil;
 
-public class WinViewController {
+public class WinViewController implements Initializable {
 
 	@FXML private Button btnAgain;
 	@FXML private Button btnQuit;
-	//@FXML private TextArea lblAttempts;
 	@FXML private VBox box;
 	@FXML private VBox titleBox;
 	@FXML private Label lblCongrats;
@@ -34,14 +35,12 @@ public class WinViewController {
 	@FXML private Label lblAttemptsFailed;
 	@FXML private Label lblTryAgain;
 	
-	/**
-	 * This method is called when the view is loaded.
-	 * It sets the text of the label to show the number of attempts.
-	 */
-	@FXML
-	private void setAttempts() {
-		int attempts = 3;
+	@Override
+	public void initialize(URL url, ResourceBundle resourceBundle) {
+		int attempts = WordleViewController.getAttemptNumber();
+		String word = WordleViewController.getTargetedWord();
 		lblAttempts.setText("You completed the game in " + attempts + " attempts.");
+		lblComplete.setText("The word was: " + word + ".");
 	}
 	
 	/**

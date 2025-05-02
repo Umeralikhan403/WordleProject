@@ -44,10 +44,10 @@ public class WordleViewController implements Initializable {
 	@FXML
 	private Label remainingAttemptsLabel;
 	private final Label[][] row = new Label[6][5];
-	private int attemptNumber = 0;
-	private int currenttLetterIndex = 0;
+	private static int attemptNumber = 0;
+	private int currentLetterIndex = 0;
 	private final GameService gameService = new GameService();
-	private String targettedWord;
+	private static String targettedWord;
 	private boolean overGame = false;
 
 	@Override
@@ -82,7 +82,7 @@ public class WordleViewController implements Initializable {
 					// Always consume ENTER events to prevent them from triggering buttons
 					event.consume();
 					// Then manually handle what should happen with ENTER
-					if (currenttLetterIndex == 5 && !overGame && attemptNumber < 6) {
+					if (currentLetterIndex == 5 && !overGame && attemptNumber < 6) {
 						checkResult();
 					}
 				} else {
@@ -112,18 +112,18 @@ public class WordleViewController implements Initializable {
 	// Next step will go here — handleKeyPress
 	private void handleKeyPress(KeyCode key) {
 		System.out.println(">>>>> key handling : " + key + ", attempt no. " + attemptNumber + ", letter index is: "
-				+ currenttLetterIndex);
+				+ currentLetterIndex);
 		if (attemptNumber >= 6 || overGame)
 			return;
 
-		if (key.isLetterKey() && currenttLetterIndex < 5) {
+		if (key.isLetterKey() && currentLetterIndex < 5) {
 			String alphabet = key.getName().toUpperCase();
-			row[attemptNumber][currenttLetterIndex].setText(alphabet);
-			currenttLetterIndex++;
-		} else if (key == KeyCode.BACK_SPACE && currenttLetterIndex > 0) {
-			currenttLetterIndex--;
-			row[attemptNumber][currenttLetterIndex].setText("");
-		} else if (key == KeyCode.ENTER && currenttLetterIndex == 5) {
+			row[attemptNumber][currentLetterIndex].setText(alphabet);
+			currentLetterIndex++;
+		} else if (key == KeyCode.BACK_SPACE && currentLetterIndex > 0) {
+			currentLetterIndex--;
+			row[attemptNumber][currentLetterIndex].setText("");
+		} else if (key == KeyCode.ENTER && currentLetterIndex == 5) {
 			checkResult();
 		}
 	}
@@ -197,7 +197,7 @@ public class WordleViewController implements Initializable {
 		}
 		/// move to the next attempt
 		attemptNumber++;
-		currenttLetterIndex = 0;
+		currentLetterIndex = 0;
 		updateLettersSelected();
 
 		if (attemptNumber >= 6) {
@@ -246,6 +246,16 @@ public class WordleViewController implements Initializable {
 
 		me.addGameResult(result);
 		PlayerRepository.updatePlayer(me);
+	}
+	
+	// This method is used to get the number of attempts
+	public static int getAttemptNumber() {
+		return attemptNumber;
+	}
+	
+	// This method is used to get the targeted word
+	public static String getTargetedWord() {
+		return targettedWord;
 	}
 
 	// styling the rows based on the result
