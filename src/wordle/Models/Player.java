@@ -66,6 +66,12 @@ public class Player implements Serializable {
         this.totalScore = totalScore;
     }
 	
-	
+    /**
+     * Resets the player's scores and clears the score history.
+     */
+	public void resetScores() {
+		this.history.clear();
+		this.totalScore = 0;
+	}
 
 }
