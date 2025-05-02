@@ -1,5 +1,8 @@
 package wordle.Controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import wordle.Models.GameResult;
 import wordle.Models.GameStatus;
 import wordle.Models.Player;
@@ -148,6 +152,17 @@ public class WordleViewController implements Initializable {
 		boolean[] targetMatched = new boolean[5];
 		boolean[] guessMatched = new boolean[5];
 
+		if (!gameService.isValidWord(guessLetter)) {
+		    System.out.println("Not in word list: " + guessLetter);
+		    
+		    // Provide visual feedback that the word is invalid
+		    showInvalidWordFeedback();
+		    
+		    // Don't proceed with the rest of the check
+		    return;
+		}
+		
+		
 		// first try, correct position i.e green colour row
 		for (int i = 0; i < 5; i++) {
 			Label cell = row[attemptNumber][i];
@@ -276,6 +291,47 @@ public class WordleViewController implements Initializable {
 		return "-fx-background-color: #878787; -fx-border-color: #878787; -fx-border-width: 2; "
 				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
 				+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
+	}
+	
+	private void showInvalidWordFeedback() {
+	    // Flash effect using a timeline
+	    Timeline timeline = new Timeline(
+	        new KeyFrame(Duration.millis(200), evt -> {
+	            // Flash cells red
+	            for (int i = 0; i < 5; i++) {
+	                row[attemptNumber][i].setStyle(invalidWordStyle());
+	            }
+	        }),
+	        new KeyFrame(Duration.millis(400), evt -> {
+	            // Restore original appearance
+	            for (int i = 0; i < 5; i++) {
+	                row[attemptNumber][i].setStyle(defaultStyle());
+	            }
+	        })
+	    );
+	    timeline.setCycleCount(2); // Flash twice
+	    timeline.play();
+	    
+	    // Show "Not in word list!" message
+	    Platform.runLater(() -> {
+	        attemptLabel.setText("Not in word list!");
+	        // Reset the attempt label after a delay
+	        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+	        pause.setOnFinished(event -> updateLettersSelected());
+	        pause.play();
+	    });
+	}
+	
+	private String invalidWordStyle() {
+	    return "-fx-background-color: #FF5252; -fx-border-color: #FF0000; -fx-border-width: 2; "
+	            + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+	            + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
+	}
+
+	private String defaultStyle() {
+	    return "-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-width: 2; "
+	            + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
+	            + "-fx-font-weight: bold; -fx-text-fill: black; -fx-background-radius: 10; -fx-border-radius: 10;";
 	}
 
 }

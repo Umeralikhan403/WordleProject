@@ -116,4 +116,19 @@ public class GameService {
             return false;
         }
     }
+    
+     // Check if the word is in  target words list
+    public boolean isValidWord(String word) {
+        String upperCaseWord = word.toUpperCase();
+        
+        // Check if the word is in the list of valid words
+        for (Object wordObj : wordsList) {
+            String validWord = ((String) wordObj).toUpperCase();
+            if (validWord.equals(upperCaseWord)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
