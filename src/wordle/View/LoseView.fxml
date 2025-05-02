@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -7,66 +8,49 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0"
-	xmlns="http://javafx.com/javafx/23.0.1"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="wordle.Controller.WinViewController">
+<VBox prefHeight="620.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wordle.Controller.WinViewController">
 	<children>
-		<AnchorPane maxHeight="-1.0" maxWidth="-1.0"
-			prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+		<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
 			<children>
-				<VBox fx:id="box" alignment="CENTER" prefHeight="373.0"
-					prefWidth="640.0" spacing="40.0">
+				<VBox fx:id="box" alignment="CENTER" prefHeight="620.0" prefWidth="685.0" spacing="40.0">
 					<children>
-						<VBox fx:id="titleBox" alignment="CENTER" prefHeight="100.0"
-							prefWidth="474.0">
+						<VBox fx:id="titleBox" alignment="CENTER" prefHeight="183.0" prefWidth="686.0">
 							<children>
-								<Label fx:id="lblFailure" prefHeight="61.0"
-									prefWidth="223.0" text="Oh dear!">
+      								<Label fx:id="lblFailure" prefHeight="72.0" prefWidth="276.0" text="Oh dear!">
+      									<font>
+      										<Font name="Futura Bold" size="55.0" />
+      									</font>
+      								</Label>
+								<Line endX="584.2929077148438" endY="0.2928932309150696" startX="-100.0" />
+								<Label fx:id="lblComplete" prefHeight="27.0" prefWidth="161.0" text="Game Complete.">
 									<font>
-										<Font name="Futura Bold" size="46.0" />
-									</font>
-								</Label>
-								<Line endX="335.0" startX="-100.0" />
-								<Label fx:id="lblComplete" prefHeight="20.0"
-									prefWidth="118.0" text="Game Complete.">
-									<font>
-										<Font name="Futura Medium" size="15.0" />
+										<Font name="Futura Medium" size="20.0" />
 									</font>
 								</Label>
 							</children>
 						</VBox>
-						<VBox fx:id="againBox" alignment="CENTER" prefHeight="44.0"
-							prefWidth="640.0">
+						<VBox fx:id="againBox" alignment="CENTER" prefHeight="185.0" prefWidth="686.0">
 							<children>
-								<Label fx:id="lblAttemptsFailed" prefHeight="23.0"
-									prefWidth="238.0" text="You were unable to complete the game.">
+								<Label fx:id="lblAttemptsFailed" prefHeight="27.0" prefWidth="369.0" text="You were unable to complete the game.">
 									<font>
-										<Font name="Futura Medium" size="13.0" />
+										<Font name="Futura Medium" size="20.0" />
 									</font>
 								</Label>
-								<Label fx:id="lblTryAgain" prefHeight="18.0"
-									prefWidth="171.0" text="Would you like to try again?">
+								<Label fx:id="lblTryAgain" prefHeight="27.0" prefWidth="266.0" text="Would you like to try again?">
 									<font>
-										<Font name="Futura Medium" size="13.0" />
+										<Font name="Futura Medium" size="20.0" />
 									</font>
 								</Label>
 							</children>
 						</VBox>
-						<HBox fx:id="buttonBox" alignment="CENTER" prefHeight="100.0"
-							prefWidth="424.0" spacing="40.0">
+						<HBox fx:id="buttonBox" alignment="CENTER" prefHeight="176.0" prefWidth="686.0" spacing="40.0">
 							<children>
-								<Button fx:id="btnAgain" mnemonicParsing="false"
-									onAction="#PlayAgainHandler"
-									style="-fx-background-color: green;" text="Play Again"
-									textFill="WHITE">
+								<Button fx:id="btnAgain" mnemonicParsing="false" onAction="#PlayAgainHandler" style="-fx-background-color: green;" text="Play Again" textFill="WHITE">
 									<font>
 										<Font name="Futura Bold" size="24.0" />
 									</font>
 								</Button>
-								<Button fx:id="btnQuit" mnemonicParsing="false"
-									onAction="#QuitHandler" prefHeight="48.0" prefWidth="174.0"
-									style="-fx-background-color: red;" text="Quit" textFill="WHITE">
+								<Button fx:id="btnQuit" mnemonicParsing="false" onAction="#QuitHandler" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: red;" text="Quit" textFill="WHITE">
 									<font>
 										<Font name="Futura Bold" size="24.0" />
 									</font>
