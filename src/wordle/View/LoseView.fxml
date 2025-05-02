@@ -22,7 +22,7 @@
       									</font>
       								</Label>
 								<Line endX="584.2929077148438" endY="0.2928932309150696" startX="-100.0" />
-								<Label fx:id="lblComplete" prefHeight="27.0" prefWidth="161.0" text="Game Complete.">
+								<Label fx:id="lblComplete"  alignment="CENTER" textAlignment="CENTER" prefHeight="27.0" prefWidth="400.0" text="Game Complete."  wrapText="true">
 									<font>
 										<Font name="Futura Medium" size="20.0" />
 									</font>

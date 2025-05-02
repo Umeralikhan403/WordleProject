@@ -37,10 +37,24 @@ public class WinViewController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-		int attempts = WordleViewController.getAttemptNumber();
+		int attempts = WordleViewController.getAttemptNumber() + 1;
 		String word = WordleViewController.getTargetedWord();
-		lblAttempts.setText("You completed the game in " + attempts + " attempts.");
-		lblComplete.setText("The word was: " + word + ".");
+		System.out.println(word);
+		// Check if this is a win or lose view by checking which labels exist
+				if (lblAttempts != null) {
+					// Win view
+					lblAttempts.setText("You completed the game in " + attempts + " attempts.");
+				}
+				
+				// This is common for both views
+				if (lblComplete != null) {
+					lblComplete.setText("The word was: " + word + ".");
+					
+					  lblComplete.setWrapText(true);
+				      lblComplete.setPrefWidth(400); // Make sure it's wide enough
+				}
+//		lblAttempts.setText("You completed the game in " + attempts + " attempts.");
+//		lblComplete.setText("The word was: " + word + ".");
 	}
 	
 	/**

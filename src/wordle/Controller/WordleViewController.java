@@ -52,6 +52,7 @@ public class WordleViewController implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
+		 attemptNumber = 0;
 		// first we have to load the list of words
 		gameService.loadWordsList();
 		targettedWord = gameService.getTargetWords();

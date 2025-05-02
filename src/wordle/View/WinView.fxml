@@ -16,13 +16,13 @@
 					<children>
 						<VBox fx:id="titleBox" alignment="CENTER" prefHeight="152.0" prefWidth="685.0">
 							<children>
-								<Label fx:id="lblCongrats" prefHeight="71.0" prefWidth="498.0" text="Congratulations!">
+								<Label fx:id="lblCongrats" prefHeight="71.0" prefWidth="498.0" text="Congratulations!"  alignment="CENTER" textAlignment="CENTER">
 									<font>
 										<Font name="Futura Bold" size="54.0" />
 									</font>
 								</Label>
 								<Line endX="584.0" startX="-100.0" />
-								<Label fx:id="lblComplete" prefHeight="27.0" prefWidth="160.0" text="Game Complete!">
+								<Label fx:id="lblComplete" prefHeight="27.0" prefWidth="160.0" text="Game Complete!" alignment="CENTER" textAlignment="CENTER">
 									<font>
 										<Font name="Futura Medium" size="20.0" />
 									</font>
