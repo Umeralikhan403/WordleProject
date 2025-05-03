@@ -66,7 +66,7 @@ public class WinViewController implements Initializable {
 		try {
             //Load the FXML file.
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/wordle/View/WordleView.fxml")
+                getClass().getResource("/wordle/View/ChooseGameView.fxml")
             );
             Parent mainRoot = loader.load();
 

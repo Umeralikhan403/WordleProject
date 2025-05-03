@@ -44,7 +44,7 @@ public class NerdleController implements Initializable {
 	private int attemptNumber = 0;
 	private int currentDigitIndex = 0;
 	private final GameService gameService = new GameService();
-	private String targetEquation;
+	private String equationTarget;
 	private boolean gameOver = false;
 
 	@Override
@@ -53,8 +53,8 @@ public class NerdleController implements Initializable {
 		new Thread(() -> {
 			gameService.loadEquationsList();
 			Platform.runLater(() -> {
-				targetEquation = gameService.getTargetEquation();
-				System.out.println(">>>>> Targetted Equation: " + targetEquation);
+				equationTarget = gameService.getTargetEquation();
+				System.out.println(">>>>> Targetted Equation: " + equationTarget);
 
 				setupRows();
 				updateAttemptNumber();
@@ -165,7 +165,7 @@ public class NerdleController implements Initializable {
 			return;
 		}
 
-		String target = targetEquation;
+		String target = equationTarget;
 		char[] targetChars = target.toCharArray();
 		boolean[] targetMatched = new boolean[8];
 		boolean[] guessMatched = new boolean[8];
