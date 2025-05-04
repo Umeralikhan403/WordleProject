@@ -53,6 +53,7 @@ public class WordleViewController implements Initializable {
 	private final GameService gameService = new GameService();
 	private static String targettedWord;
 	private boolean overGame = false;
+	private static Scene menuView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -272,6 +273,10 @@ public class WordleViewController implements Initializable {
 	// This method is used to get the targeted word
 	public static String getTargetedWord() {
 		return targettedWord;
+	}
+	
+	public static void setMenuView(Scene scene) {
+		menuView = scene;
 	}
 
 	// styling the rows based on the result

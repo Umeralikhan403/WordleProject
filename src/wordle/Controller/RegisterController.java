@@ -72,9 +72,4 @@ public class RegisterController {
             AlertUtil.warn("Error", "Could not load registration screen.");
         }
     }
-    
-    
-
-    
-    
 }

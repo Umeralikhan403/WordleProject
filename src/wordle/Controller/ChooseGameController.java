@@ -16,6 +16,8 @@ public class ChooseGameController {
 
 	@FXML
 	private Button nerdleButton;
+	
+	private static int gameType;
 
 	@FXML
 	private void startWordle(ActionEvent event) {
@@ -24,6 +26,10 @@ public class ChooseGameController {
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.setScene(new Scene(root));
 			stage.show();
+			gameType = 1; // Wordle
+			// Set the menu view for Wordle
+			//Scene menuScene = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
+			//WordleViewController.setMenuView(menuScene);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -36,9 +42,14 @@ public class ChooseGameController {
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.setScene(new Scene(root));
 			stage.show();
+			gameType = 2; // Nerdle
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static int getGameType() {
+		return gameType;
 	}
 
 	// added hover effect 

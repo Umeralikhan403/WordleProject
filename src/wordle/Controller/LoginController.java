@@ -25,6 +25,7 @@ public class LoginController {
     @FXML private Button loginButton;
     @FXML private Button registerButton;
     @FXML private Button guestButton;
+    @FXML private Button btnOpenHelp;
 
  
     /** Fired when the user clicks LOGIN */
@@ -84,11 +85,44 @@ public class LoginController {
 
     /** Fired when the user clicks Continue as Guest */
     @FXML
-    private void handleGuest(ActionEvent event) {
+    private void handleGuest(ActionEvent e) {
         // TODO: load guest view or game directly
         AlertUtil.info( "Guest Mode", 
                   "Entering as Guest. Scores won’t be saved.");
+        try {
+            // 1. Load the FXML
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/wordle/View/ChooseGameView.fxml")
+            );
+            Parent mainRoot = loader.load();
+
+            // 2. Grab the current window (Stage)
+            Stage stage = (Stage) ((Node) e.getSource())
+                                  .getScene()
+                                  .getWindow();
+
+            // 3. Swap in the new Scene
+            Scene mainScene = new Scene(mainRoot);
+            stage.setScene(mainScene);
+            stage.setTitle("Wordle — Main");
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            AlertUtil.warn("Navigation Error", "Could not load the main view.");
+        }
     }
-
-
+    
+    @FXML
+    private void openHelpHandler(ActionEvent e) {
+		try {
+			Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+			Parent root = FXMLLoader.load(
+				getClass().getResource("/wordle/View/HelpView.fxml")
+			);
+			stage.setScene(new Scene(root));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			AlertUtil.warn("Navigation Error", "Help view failed to load.");
+		}
+	}
 }

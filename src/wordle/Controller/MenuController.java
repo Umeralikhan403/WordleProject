@@ -45,9 +45,15 @@ public class MenuController implements Initializable {
 	 
 	@FXML
 	private void closeMenuHandler(ActionEvent e) throws IOException {
-		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WordleView.fxml"));
-		stage.setScene(new Scene(root));
+		if (ChooseGameController.getGameType() == 1) {
+			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WordleView.fxml"));
+			stage.setScene(new Scene(root));
+		} else if (ChooseGameController.getGameType() == 2) {
+			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/NerdleView.fxml"));
+			stage.setScene(new Scene(root));
+		}
 	}
 
 	@FXML
@@ -92,10 +98,6 @@ public class MenuController implements Initializable {
 		// Close the application
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		stage.close();
-	}
-	
-	private void getCurrentGame() {
-		
 	}
 
 	// helper method to build dialogs
