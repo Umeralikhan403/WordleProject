@@ -82,4 +82,9 @@
 			</Label>
 		</VBox>
 	</VBox>
+   <Button fx:id="btnOpenHelp" onAction="#openHelpHandler" layoutX="14.0" layoutY="566.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: black;" text="HELP" textFill="WHITE">
+      <font>
+         <Font name="Futura Bold" size="18.0" />
+      </font>
+   </Button>
 </AnchorPane>
