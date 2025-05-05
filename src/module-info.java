@@ -3,7 +3,8 @@ module Wordle {
     requires javafx.fxml;
     requires javafx.graphics;
 	requires java.scripting;
-	requires javafx.base;  
+	requires javafx.base;
+	requires org.junit.jupiter.api;  
     // allow FXMLLoader to reflect into these packages:
     opens wordle.Controller to javafx.fxml;
     opens wordle.Models    to javafx.fxml;
