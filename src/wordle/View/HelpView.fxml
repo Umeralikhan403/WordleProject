@@ -212,7 +212,7 @@
 										<VBox alignment="CENTER" prefWidth="236.0">
 											<children>
 												<Label prefHeight="59.0" prefWidth="236.0"
-													text="When a number is in the equation but in another position it becomes yellow."
+													text="When a number is in the equation but in another position it becomes purple."
 													wrapText="true">
 													<font>
 														<Font name="Futura Medium" size="13.0" />
