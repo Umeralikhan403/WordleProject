@@ -92,6 +92,18 @@ public class MenuController implements Initializable {
 			AlertUtil.warn("Navigation Error", "Login view failed to load.");
 		}
 	}
+	
+	@FXML
+	private void switchGameHandler(ActionEvent e) {
+		try {
+			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/ChooseGameView.fxml"));
+			stage.setScene(new Scene(root));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			AlertUtil.warn("Navigation Error", "Choose game view failed to load.");
+		}
+	}
 
 	@FXML
 	private void menuQuitHandler(ActionEvent e) {
