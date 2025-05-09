@@ -4,74 +4,126 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.geometry.Insets?>
-
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="wordle.Controller.StatisticsController">
-
-  <!-- Main container anchors to all sides -->
-  <VBox spacing="15.0"
-        AnchorPane.topAnchor="10"
-        AnchorPane.leftAnchor="10"
-        AnchorPane.rightAnchor="10"
-        AnchorPane.bottomAnchor="10">
-    <padding>
-      <Insets top="10" right="10" bottom="20" left="10" />
-    </padding>
-
-    <!-- Top bar: title on left, back on right -->
-    <HBox alignment="CENTER_LEFT" spacing="10.0">
-      <Label text="Player Statistics"
-             style="-fx-font-size: 24; -fx-font-weight: bold;" />
-      <Region HBox.hgrow="ALWAYS" />
-      <Button text="← Back"
-              style="-fx-font-weight: bold;"
-              onAction="#handleBack" />
-    </HBox>
-
-    <!-- Summary grid with percentage-based columns -->
-    <GridPane hgap="10" vgap="10">
-      <columnConstraints>
-        <ColumnConstraints percentWidth="25"/>
-        <ColumnConstraints percentWidth="25"/>
-        <ColumnConstraints percentWidth="25"/>
-        <ColumnConstraints percentWidth="25"/>
-      </columnConstraints>
-      <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-      </rowConstraints>
-
-      <Label text="Total Score:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-      <Label fx:id="totalScoreLabel" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-      <Label text="High Score:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-      <Label fx:id="highScoreLabel" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-
-      <Label text="Average Score:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-      <Label fx:id="averageScoreLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-      <Label text="Games Played:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      <Label fx:id="gamesPlayedLabel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-
-      <Label text="Win %:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-      <Label fx:id="winPercentageLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    </GridPane>
-
-    <!-- Chart and table share available space -->
-    <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-      <PieChart fx:id="winLossPieChart"
-                title="Win / Loss Ratio"
-                HBox.hgrow="ALWAYS" />
-
-      <TableView fx:id="winsTable" HBox.hgrow="ALWAYS">
-        <columns>
-          <TableColumn fx:id="wordColumn" text="Word" />
-          <TableColumn fx:id="attemptsColumn" text="Attempts" />
-          <TableColumn fx:id="scoreColumn" text="Score" />
-        </columns>
-      </TableView>
-    </HBox>
-  </VBox>
+    <!-- Main container anchors to all sides -->
+    <VBox spacing="15.0"
+          AnchorPane.topAnchor="10"
+          AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10">
+        <padding>
+            <Insets top="10" right="10" bottom="20" left="10" />
+        </padding>
+        <!-- Top bar: title on left, back on right -->
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label text="Player Statistics"
+                  style="-fx-font-size: 24; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="← Back"
+                   style="-fx-font-weight: bold;"
+                   onAction="#handleBack" />
+        </HBox>
+        <!-- TabPane for separating Wordle and Nerdle stats -->
+        <TabPane fx:id="gameTypeTabs" VBox.vgrow="ALWAYS">
+            <tabs>
+                <!-- WORDLE TAB -->
+                <Tab fx:id="wordleTab" text="Wordle Stats" closable="false">
+                    <content>
+                        <VBox spacing="15.0">
+                            <!-- Summary grid with percentage-based columns -->
+                            <GridPane hgap="10" vgap="10">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+                                <Label text="Total Score:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label fx:id="totalScoreWordleLabel" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <Label text="High Score:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                <Label fx:id="highScoreWordleLabel" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                                <Label text="Average Score:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <Label fx:id="averageScoreWordleLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label text="Games Played:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <Label fx:id="gamesPlayedWordleLabel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                <Label text="Win %:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                <Label fx:id="winPercentageWordleLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            </GridPane>
+                            <!-- Chart and table share available space -->
+                            <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                                <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                    <PieChart fx:id="winLossPieChartWordle"
+                                             title="Win / Loss Ratio"
+                                             legendVisible="true"
+                                             VBox.vgrow="ALWAYS" />
+                                </VBox>
+                                <TableView fx:id="winsTableWordle" HBox.hgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="wordColumnWordle" text="Word" />
+                                        <TableColumn fx:id="attemptsColumnWordle" text="Attempts" />
+                                        <TableColumn fx:id="scoreColumnWordle" text="Score" />
+                                    </columns>
+                                </TableView>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Tab>
+                
+                <!-- NERDLE TAB -->
+                <Tab fx:id="nerdleTab" text="Nerdle Stats" closable="false">
+                    <content>
+                        <VBox spacing="15.0">
+                            <!-- Summary grid with percentage-based columns -->
+                            <GridPane hgap="10" vgap="10">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+                                <Label text="Total Score:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label fx:id="totalScoreNerdleLabel" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <Label text="High Score:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                <Label fx:id="highScoreNerdleLabel" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                                <Label text="Average Score:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <Label fx:id="averageScoreNerdleLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label text="Games Played:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <Label fx:id="gamesPlayedNerdleLabel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                <Label text="Win %:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                <Label fx:id="winPercentageNerdleLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            </GridPane>
+                            <!-- Chart and table share available space -->
+                            <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                                <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                    <PieChart fx:id="winLossPieChartNerdle"
+                                             title="Win / Loss Ratio" 
+                                             legendVisible="true"
+                                             VBox.vgrow="ALWAYS" />
+                                </VBox>
+                                <TableView fx:id="winsTableNerdle" HBox.hgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="equationColumnNerdle" text="Equation" />
+                                        <TableColumn fx:id="attemptsColumnNerdle" text="Attempts" />
+                                        <TableColumn fx:id="scoreColumnNerdle" text="Score" />
+                                    </columns>
+                                </TableView>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </VBox>
 </AnchorPane>

@@ -1,5 +1,4 @@
 package wordle.Controller;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,13 +12,17 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import wordle.Service.GameService;
+import wordle.Models.GameResult;
+import wordle.Models.GameStatus;
+import wordle.Models.Player;
+import wordle.Service.Session;
+import wordle.Service.PlayerRepository;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class NerdleController implements Initializable {
-
 	@FXML
 	private Label cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07;
 	@FXML
@@ -32,57 +35,47 @@ public class NerdleController implements Initializable {
 	private Label cell40, cell41, cell42, cell43, cell44, cell45, cell46, cell47;
 	@FXML
 	private Label cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57;
-
 	@FXML
 	private Button btnOpenMenu;
 	@FXML
 	private Label attemptLabel;
 	@FXML
 	private Label remainingAttemptsLabel;
-
 	private final Label[][] row = new Label[6][8];
 	private int attemptNumber = 0;
 	private int currentDigitIndex = 0;
 	private final GameService gameService = new GameService();
 	private String equationTarget;
 	private boolean gameOver = false;
-
+	private final int maxAttempts = 6; // Max attempts for Nerdle
+	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-
 		new Thread(() -> {
 			gameService.loadEquationsList();
 			Platform.runLater(() -> {
 				equationTarget = gameService.getTargetEquation();
 				System.out.println(">>>>> Targetted Equation: " + equationTarget);
-
 				setupRows();
 				updateAttemptNumber();
-
 				Scene scene = row[0][0].getScene();
 				btnOpenMenu.setDefaultButton(false);
 				btnOpenMenu.setCancelButton(false);
-
 				// Handle normal character keys here
 				scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_TYPED, event -> {
-
 					String keyText = event.getCharacter();
 					// Ignore SHIFT, CTRL, ALT or EMPTY buttons
 					if (keyText.isEmpty() || keyText.trim().isEmpty() || keyText.charAt(0) < 32) {
 						return;
 					}
-
 					if ("0123456789+-*/=".contains(keyText) && currentDigitIndex < 8) {
 						row[attemptNumber][currentDigitIndex].setText(keyText);
 						currentDigitIndex++;
 					}
 				});
-
 				// Handle ENTER and BACKSPACE separately
 				scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-
 					KeyCode code = event.getCode();
-
 					if (code == KeyCode.ENTER) {
 						event.consume();
 						if (currentDigitIndex == 8 && !gameOver && attemptNumber < 6) {
@@ -98,7 +91,7 @@ public class NerdleController implements Initializable {
 			});
 		}).start();
 	}
-
+	
 	private void setupRows() {
 		row[0] = new Label[] { cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07 };
 		row[1] = new Label[] { cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17 };
@@ -107,55 +100,65 @@ public class NerdleController implements Initializable {
 		row[4] = new Label[] { cell40, cell41, cell42, cell43, cell44, cell45, cell46, cell47 };
 		row[5] = new Label[] { cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57 };
 	}
-
+	
 	private void updateAttemptNumber() {
 		attemptLabel.setText((attemptNumber + 1) + "/6");
 		int rem = 6 - attemptNumber;
 		remainingAttemptsLabel.setText(rem + " attempt" + (rem > 1 ? "s" : "") + " remaining");
 	}
-
-// we need to make the syntax correct
+	
+	// New method to record game results, similar to Wordle controller
+	private void recordAndPersistResult(boolean won) {
+		Player me = Session.getCurrentPlayer();
+		// attemptsUsed = attemptNumber+1 if you zero-index attempts
+		int used = attemptNumber + 1;
+		GameStatus status = won ? GameStatus.WON : GameStatus.FAILED;
+		
+		// Create a new GameResult with the NERDLE game type
+		GameResult result = new GameResult(
+			equationTarget,  // the equation
+			maxAttempts,     // max allowed attempts
+			used,            // attempts actually used
+			status,          // WON or FAILED
+			GameResult.GameType.NERDLE  // specify this is a Nerdle game
+		);
+		
+		// Add result to player history and persist
+		me.addGameResult(result);
+		PlayerRepository.updatePlayer(me);
+	}
+	
+	// we need to make the syntax correct
 	private boolean isProperEquationSyntax(String equation) {
 		if (equation == null || equation.length() != 8)
 			return false;
 		if (!equation.contains("="))
 			return false;
-
 		String[] parts = equation.split("=");
-
 		if (parts.length != 2)
 			return false;
-
 		String left = parts[0];
 		String right = parts[1];
-
 		if (left.isEmpty() || right.isEmpty())
 			return false;
-
 		// Left side must contain only valid math chars
 		if (!left.matches("[0-9+\\-*/]+"))
 			return false;
-
 		// Right side must contain only digits
 		if (!right.matches("[0-9]+"))
 			return false;
-
 		return true; // Everything looks good
 	}
-
+	
 	// checking and comparing the result
 	private void resultCheck() {
-
 		StringBuilder guessBuilder = new StringBuilder();
 		for (int i = 0; i < 8; i++) {
 			guessBuilder.append(row[attemptNumber][i].getText());
 		}
-
 		String guessEquation = guessBuilder.toString();
-
 		if (!isProperEquationSyntax(guessEquation)) {
 			System.out.println(">>>> Invalid Syntax!");
-
 			for (int i = 0; i < 8; i++) {
 				row[attemptNumber][i]
 						.setStyle("-fx-background-color: #FF5C5C; -fx-border-color: #FF0000; -fx-border-width: 2; "
@@ -164,33 +167,27 @@ public class NerdleController implements Initializable {
 			}
 			return;
 		}
-
 		String target = equationTarget;
 		char[] targetChars = target.toCharArray();
 		boolean[] targetMatched = new boolean[8];
 		boolean[] guessMatched = new boolean[8];
-
 		// Correct Position Check
 		for (int i = 0; i < 8; i++) {
 			Label cell = row[attemptNumber][i];
 			char guessChar = guessEquation.charAt(i);
-
 			if (guessChar == targetChars[i]) {
 				cell.setStyle(correctStyle());
 				targetMatched[i] = true;
 				guessMatched[i] = true;
 			}
 		}
-
 		// Wrong place or not found
 		for (int i = 0; i < 8; i++) {
 			if (guessMatched[i])
 				continue;
-
 			Label cell = row[attemptNumber][i];
 			char guessChar = guessEquation.charAt(i);
 			boolean found = false;
-
 			for (int j = 0; j < 8; j++) {
 				if (!targetMatched[j] && guessChar == targetChars[j]) {
 					found = true;
@@ -198,14 +195,14 @@ public class NerdleController implements Initializable {
 					break;
 				}
 			}
-
 			cell.setStyle(found ? partialStyle() : wrongStyle());
 		}
-
 		// Win code here
 		if (guessEquation.equals(target)) {
 			System.out.println(">>>>> You win!");
 			try {
+				// Record win result before opening win view
+				recordAndPersistResult(true);
 				openWinViewHandler();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -213,14 +210,14 @@ public class NerdleController implements Initializable {
 			gameOver = true;
 			return;
 		}
-
 		attemptNumber++;
 		currentDigitIndex = 0;
 		updateAttemptNumber();
-
 		if (attemptNumber >= 6) {
 			System.out.println("You lose! Correct answer was: " + target);
 			try {
+				// Record loss result before opening lose view
+				recordAndPersistResult(false);
 				openLoseViewHandler();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -228,26 +225,26 @@ public class NerdleController implements Initializable {
 			gameOver = true;
 		}
 	}
-
+	
 	@FXML
 	private void openMenuHandler(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
 		stage.setScene(new Scene(root));
 	}
-
+	
 	private void openWinViewHandler() throws IOException {
 		Stage stage = (Stage) cell00.getScene().getWindow();
 		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WinView.fxml"));
 		stage.setScene(new Scene(root));
 	}
-
+	
 	private void openLoseViewHandler() throws IOException {
 		Stage stage = (Stage) cell00.getScene().getWindow();
 		Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/LoseView.fxml"));
 		stage.setScene(new Scene(root));
 	}
-
+	
 	// Styles for different grids here
 	private String correctStyle() {
 		return "-fx-background-color: #5AC85A; -fx-border-color: #5AC85A; -fx-border-width: 2;"
@@ -255,19 +252,18 @@ public class NerdleController implements Initializable {
 				+ "-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: white;"
 				+ "-fx-background-radius: 10; -fx-border-radius: 10;";
 	}
-
+	
 	private String partialStyle() {
 		return "-fx-background-color: #B79AFD; -fx-border-color: #B79AFD; -fx-border-width: 2;"
 				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center;"
 				+ "-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: white;"
 				+ "-fx-background-radius: 10; -fx-border-radius: 10;";
 	}
-
+	
 	private String wrongStyle() {
 		return "-fx-background-color: #7C7C7C; -fx-border-color: #7C7C7C; -fx-border-width: 2;"
 				+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center;"
 				+ "-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: white;"
 				+ "-fx-background-radius: 10; -fx-border-radius: 10;";
 	}
-
 }
