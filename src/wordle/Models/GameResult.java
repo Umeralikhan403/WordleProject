@@ -4,11 +4,7 @@ import java.io.Serializable;
 public class GameResult implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    public enum GameType {
-        WORDLE,
-        NERDLE
-    }
-    
+
     private final String word;               
     private final int wordLength;            
     private final int maxAttempts;

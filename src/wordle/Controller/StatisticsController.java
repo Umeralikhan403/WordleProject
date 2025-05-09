@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import wordle.Models.GameResult;
 import wordle.Models.GameStatus;
+import wordle.Models.GameType;
 import wordle.Models.Player;
 import wordle.Service.Session;
 import wordle.Util.AlertUtil;
@@ -68,11 +69,11 @@ public class StatisticsController {
         
         // Separate histories by game type
         List<GameResult> wordleHistory = allHistory.stream()
-            .filter(result -> result.getGameType() == null || result.getGameType() == GameResult.GameType.WORDLE)
+            .filter(result -> result.getGameType() == null || result.getGameType() == GameType.WORDLE)
             .collect(Collectors.toList());
             
         List<GameResult> nerdleHistory = allHistory.stream()
-            .filter(result -> result.getGameType() == GameResult.GameType.NERDLE)
+            .filter(result -> result.getGameType() == GameType.NERDLE)
             .collect(Collectors.toList());
             
         // Initialize both tabs

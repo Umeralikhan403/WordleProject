@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import wordle.Service.GameService;
 import wordle.Models.GameResult;
 import wordle.Models.GameStatus;
+import wordle.Models.GameType;
 import wordle.Models.Player;
 import wordle.Service.Session;
 import wordle.Service.PlayerRepository;
@@ -120,7 +121,7 @@ public class NerdleController implements Initializable {
 			maxAttempts,     // max allowed attempts
 			used,            // attempts actually used
 			status,          // WON or FAILED
-			GameResult.GameType.NERDLE  // specify this is a Nerdle game
+			GameType.NERDLE  // specify this is a Nerdle game
 		);
 		
 		// Add result to player history and persist
