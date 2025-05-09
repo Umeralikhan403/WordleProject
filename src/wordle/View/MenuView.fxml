@@ -60,6 +60,11 @@
                     <Font name="Futura Medium" size="20.0" />
                 </font>
             </Button>
+         <Button fx:id="btnSwitchGame" mnemonicParsing="false" onAction="#switchGameHandler" prefHeight="40.0" prefWidth="199.0" style="-fx-background-color: white;" text="Switch Game">
+            <font>
+               <Font name="Futura Medium" size="20.0" />
+            </font>
+         </Button>
             
             <Button fx:id="btnQuit" mnemonicParsing="false" onAction="#menuQuitHandler" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: white;" text="Quit Game">
                 <font>
