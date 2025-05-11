@@ -6,8 +6,16 @@ import org.junit.jupiter.api.Test;
 
 import wordle.Service.PlayerRepository;
 
+/**
+ * TestLoginController tests the login functionality of the application.
+ * It checks if the login is successful with valid credentials and fails with invalid credentials.
+ */
 class TestLoginController {
 
+	/**
+	 * Test the login functionality with valid credentials.
+	 * It checks if the login is successful with valid credentials.
+	 */
 	@Test
 	void testLogin1() {
 		String username = "123";
@@ -16,6 +24,10 @@ class TestLoginController {
 		assertTrue(opt.isPresent(), "Login should be successful with valid credentials.");
 	}
 	
+	/**
+	 * Test the login functionality with invalid credentials.
+	 * It checks if the login fails with invalid credentials.
+	 */
 	@Test
 	void testLogin2() {
 		String username = "user1";
@@ -24,6 +36,10 @@ class TestLoginController {
 		assertFalse(opt.isPresent(), "Login should fail with invalid credentials.");
 	}
 
+	/**
+	 * Test the login functionality with empty credentials.
+	 * It checks if the login fails with empty credentials.
+	 */
 	@Test
 	void testLoginEmpty() {
 		String username = "";

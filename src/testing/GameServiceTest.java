@@ -16,16 +16,27 @@ import org.junit.jupiter.api.Test;
 
 import wordle.Service.GameService;
 
+/**
+ * Testing class for GameService.
+ * This class will test the GameService class with many different test cases.
+ */
 public class GameServiceTest {
 
     private GameService gameService;
 
+    /**
+	 * This method will run before each test case.
+	 * It will create a new instance of GameService and load the words file.
+	 */
     @BeforeEach
     public void setUp() {
         gameService = new GameService();
         manuallyLoadWordsFile(gameService, "src/wordle/Util/words.txt");
     }
 
+    /**
+	 * This test will check if the word length can be set.
+	 */
     @Test
     public void testSetWordLength() throws Exception {
         boolean success = gameService.setWordLength(6);
@@ -37,6 +48,9 @@ public class GameServiceTest {
         assertEquals(6, wordLength);
     }
 
+    /**
+     * This test will check if the current world length can be obtained.
+     */
     @Test
     public void testGetCurrentWordLength() {
         assertEquals(5, gameService.getCurrentWordLength());
@@ -44,6 +58,9 @@ public class GameServiceTest {
         assertEquals(4, gameService.getCurrentWordLength());
     }
 
+    /**
+	 * This test will check if the available word lengths can be obtained.
+	 */
     @Test
     public void testGetAvailableWordLengths() throws Exception {
         List<Integer> wordLengths = gameService.getAvailableWordLengths();
@@ -59,6 +76,9 @@ public class GameServiceTest {
         assertEquals(keys.size(), wordLengths.size());
     }
 
+    /**
+     * This test will check if the target words can be obtained.
+     */
     @Test
     public void testGetTargetWords() {
         String targetWord = gameService.getTargetWords();
@@ -66,6 +86,9 @@ public class GameServiceTest {
         assertEquals(gameService.getCurrentWordLength(), targetWord.length());
     }
 
+    /**
+	 * This test will check if the word is being validated correctly.
+	 */
     @Test
     public void testIsValidWord() {
         String targetWord = gameService.getTargetWords();
@@ -79,6 +102,9 @@ public class GameServiceTest {
         assertTrue(gameService.isValidWord(newWord));
     }
 
+    /**
+     * This test will check if the letter cases are ignored when validating words.
+     */
     @Test
     public void testValidWordCaseInsensitivity() {
         String word = "UPPER";
@@ -89,6 +115,9 @@ public class GameServiceTest {
         assertTrue(gameService.isValidWord("uPpEr"));
     }
 
+    /**
+     * This test will check if the word length is being validated correctly.
+     */
     @Test
     public void testWordLengthValidation() {
         gameService.setWordLength(5);
@@ -115,6 +144,11 @@ public class GameServiceTest {
 
     // === HELPER METHODS ===
 
+    /**
+	 * This method will add a valid word to the GameService.
+	 * @param service The GameService instance.
+	 * @param word The word to add.
+	 */
    private void addValidWord(GameService service, String word) {
     try {
         Field wordsByLengthField = GameService.class.getDeclaredField("wordsByLength");
@@ -140,7 +174,11 @@ public class GameServiceTest {
     }
 }
 
-
+    /**
+     * This method will generate a random string of the given length.
+     * @param length - The length of the string to generate.
+     * @return - The generated string.
+     */
     private String generateRandomString(int length) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
@@ -149,7 +187,12 @@ public class GameServiceTest {
         }
         return sb.toString();
     }
-
+    
+    /**
+	 * This method will manually load the words file into the GameService.
+	 * @param service - The GameService instance.
+	 * @param path - The path to the words file.
+	 */
     private void manuallyLoadWordsFile(GameService service, String path) {
         try (InputStream in = Files.newInputStream(Paths.get(path));
              BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
