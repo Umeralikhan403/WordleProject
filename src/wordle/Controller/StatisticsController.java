@@ -27,13 +27,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller responsible for displaying statistics (scores, attempts, win rate) for both Wordle and Nerdle games.
+ */
 public class StatisticsController {
 
+	// UI Components for the selection
     @FXML private TabPane gameTypeTabs;
     @FXML private Tab wordleTab;
     @FXML private Tab nerdleTab;
     
-    // Wordle Tab
+    // Wordle Tab components
     @FXML private Label totalScoreWordleLabel;
     @FXML private Label highScoreWordleLabel;
     @FXML private Label averageScoreWordleLabel;
@@ -45,7 +49,7 @@ public class StatisticsController {
     @FXML private TableColumn<GameResult, Integer> attemptsColumnWordle;
     @FXML private TableColumn<GameResult, Double> scoreColumnWordle;
     
-    // Nerdle Tab
+    // Nerdle Tab components
     @FXML private Label totalScoreNerdleLabel;
     @FXML private Label highScoreNerdleLabel;
     @FXML private Label averageScoreNerdleLabel;
@@ -57,6 +61,10 @@ public class StatisticsController {
     @FXML private TableColumn<GameResult, Integer> attemptsColumnNerdle;
     @FXML private TableColumn<GameResult, Double> scoreColumnNerdle;
 
+    
+    /**
+     * Initializes the statistics view for the currently logged-in player.
+     */
     @FXML
     public void initialize() {
         Player player = Session.getCurrentPlayer();
@@ -81,6 +89,10 @@ public class StatisticsController {
         initializeNerdle(player, nerdleHistory);
     }
     
+    
+    /**
+     * Populates statistics and visuals for Wordle results.
+     */
     private void initializeWordle(Player player, List<GameResult> history) {
         // Calculate statistics
         double totalScore = history.stream()
@@ -137,6 +149,9 @@ public class StatisticsController {
         winsTableWordle.setItems(tableItems);
     }
     
+    /**
+     * Populates statistics and visuals for Nerdle results.
+     */
     private void initializeNerdle(Player player, List<GameResult> history) {
         // Calculate statistics
         double totalScore = history.stream()
@@ -193,6 +208,9 @@ public class StatisticsController {
         winsTableNerdle.setItems(tableItems);
     }
     
+    /**
+     * Navigates back to the Menu screen.
+     */
     @FXML
     private void handleBack(ActionEvent evt) {
         try {
