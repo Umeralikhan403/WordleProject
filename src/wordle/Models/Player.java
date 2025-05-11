@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+/**
+ * The Player class represents a registered user who plays Wordle/Nerdle.
+ * It stores the user's credentials and game performance statistics.
+ */
 public class Player implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -21,6 +26,7 @@ public class Player implements Serializable {
     }
 	
 	
+	// getters and setters
 	public String getUsername() {
 		return username;
 	}
@@ -34,7 +40,7 @@ public class Player implements Serializable {
 		this.password = password;
 	}
 	
-
+	// getting history of the player
     public List<GameResult> getHistory() {
         if (history == null) {
             history = new ArrayList<>();
@@ -42,6 +48,7 @@ public class Player implements Serializable {
         return Collections.unmodifiableList(history);
     }
 
+    // Adds a new game result to the player's history and updates the total score.
     public void addGameResult(GameResult result) {
         if (history == null) {
             history = new ArrayList<>();
@@ -50,18 +57,20 @@ public class Player implements Serializable {
         totalScore += result.getScore();
     }
 
-
+    // Returns the highest score achieved by the player in any game
     public double getHighScore() {
         return history.stream()
                       .mapToDouble(GameResult::getScore)
                       .max()
                       .orElse(0);
     }
-
+    
+    // gets the total accumulated score of the player.
     public double getTotalScore() {
         return totalScore;
     }
 
+    // sets the score directly 
     public void setTotalScore(double totalScore) {
         this.totalScore = totalScore;
     }
