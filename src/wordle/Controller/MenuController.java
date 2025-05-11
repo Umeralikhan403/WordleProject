@@ -19,6 +19,9 @@ import javafx.stage.Stage;
 import wordle.Service.Session;
 import wordle.Util.AlertUtil;
 
+/**
+ * The MenuController sets up and handles events from the menu view.
+ */
 public class MenuController implements Initializable {
 
 	@FXML
@@ -33,6 +36,9 @@ public class MenuController implements Initializable {
 	private Button btnQuit;
 	@FXML private Label helloLabel;
 
+	/**
+	 * Initialise the menu view by obtaining the username and putting it in the label.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 	    var player = Session.getCurrentPlayer();
@@ -42,7 +48,13 @@ public class MenuController implements Initializable {
 	    	helloLabel.setText("Hello, Guest!");
 	    }
 	}
-	 
+	
+	/**
+	 * Close the menu when the button is clicked.
+	 * Checks which game was chosen and loads back to the correct game.
+	 * @param e - the action event
+	 * @throws IOException - if the FXML file cannot be loaded
+	 */
 	@FXML
 	private void closeMenuHandler(ActionEvent e) throws IOException {
 		if (ChooseGameController.getGameType() == 1) {
@@ -56,6 +68,10 @@ public class MenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * Loads the statistics view when the button is clicked
+	 * @param e - the action event
+	 */
 	@FXML
 	private void viewScoresHandler(ActionEvent e) {
 		try {
@@ -68,6 +84,10 @@ public class MenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * Opens a dialog for the user to confirm if they want to reset the scores.
+	 * @param e - the action event
+	 */
 	@FXML
 	private void resetScoresHandler(ActionEvent e) {
 		 alertDialogBuilder(AlertType.CONFIRMATION, "Reset Scores", "Confirmation",
@@ -79,7 +99,11 @@ public class MenuController implements Initializable {
 			AlertUtil.warn("Reset Scores", "No player is currently logged in.");
 		}
 	}
-
+	
+	/**
+	 * Asks the user whether they want to sign out, and then signs them out if they confirm.
+	 * @param e - the action event
+	 */
 	@FXML
 	private void signOutHandler(ActionEvent e) {
 		alertDialogBuilder(AlertType.CONFIRMATION, "Sign Out", "Confirmation", "Are you sure you want to sign out?");
@@ -93,6 +117,10 @@ public class MenuController implements Initializable {
 		}
 	}
 	
+	/**
+	 * Switches to the choose game view when the button is clicked.
+	 * @param e - the action event
+	 */
 	@FXML
 	private void switchGameHandler(ActionEvent e) {
 		try {
@@ -105,6 +133,10 @@ public class MenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * Closes the application when the button is clicked.
+	 * @param e - the action event
+	 */
 	@FXML
 	private void menuQuitHandler(ActionEvent e) {
 		// Close the application
@@ -113,6 +145,13 @@ public class MenuController implements Initializable {
 	}
 
 	// helper method to build dialogs
+	/**
+	 * Creates an alert dialog with the specified parameters.
+	 * @param type - the type of alert
+	 * @param title - the title of the alert
+	 * @param header - the header text of the alert
+	 * @param content - the content text of the alert
+	 */
 	private void alertDialogBuilder(AlertType type, String title, String header, String content) {
 		Alert alert = new Alert(type);
 		alert.setTitle(title);

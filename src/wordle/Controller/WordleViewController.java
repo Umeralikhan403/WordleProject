@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The WordleViewController handles the game logic and UI interactions for the Wordle game.
+ */
 public class WordleViewController implements Initializable {
 
     @FXML
@@ -49,7 +52,6 @@ public class WordleViewController implements Initializable {
     private final GameService gameService = new GameService();
     private static String targettedWord;
     private boolean overGame = false;
-    private static Scene menuView;
     private int maxAttempts = 6; // Default max attempts
     private int wordLength = 5; // Default word length
 
@@ -333,10 +335,6 @@ public class WordleViewController implements Initializable {
     // This method is used to get the targeted word
     public static String getTargetedWord() {
         return targettedWord;
-    }
-    
-    public static void setMenuView(Scene scene) {
-        menuView = scene;
     }
 
     // Styling the rows based on the result
