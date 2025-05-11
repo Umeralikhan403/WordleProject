@@ -1,6 +1,7 @@
 package wordle.Controller;
 
 import javafx.fxml.FXML;
+
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
+/**
+ * This is the controller for the Choose Game Screen. Allows user to select
+ * either Wordle or Nerdle game. Also manages hover effects and stores selected
+ * game type.
+ */
+
 public class ChooseGameController {
 
 	@FXML
@@ -16,9 +23,13 @@ public class ChooseGameController {
 
 	@FXML
 	private Button nerdleButton;
-	
+
 	private static int gameType;
 
+	/**
+	 * THIS Handles starting the Wordle game. Loads the Wordle game view and sets
+	 * the gameType to 1.
+	 */
 	@FXML
 	private void startWordle(ActionEvent event) {
 		try {
@@ -28,13 +39,18 @@ public class ChooseGameController {
 			stage.show();
 			gameType = 1; // Wordle
 			// Set the menu view for Wordle
-			//Scene menuScene = FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
-			//WordleViewController.setMenuView(menuScene);
+			// Scene menuScene =
+			// FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
+			// WordleViewController.setMenuView(menuScene);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * THIS handles the starting of the Nerdle game. Loads the Nerdle game view and
+	 * sets the gameType to 2.
+	 */
 	@FXML
 	private void startNerdle(ActionEvent event) {
 		try {
@@ -47,12 +63,14 @@ public class ChooseGameController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static int getGameType() {
 		return gameType;
 	}
 
-	// added hover effect 
+	/**
+	 * THIS handles the hover enter effect on Wordle button.
+	 */
 	@FXML
 	private void wordleHoverEnter(MouseEvent event) {
 		wordleButton.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white; "
@@ -60,6 +78,9 @@ public class ChooseGameController {
 				+ "-fx-background-radius: 10; -fx-cursor: hand;");
 	}
 
+	/**
+	 * THIS handles the hover exit effect on Wordle button.
+	 */
 	@FXML
 	private void wordleHoverExit(MouseEvent event) {
 		wordleButton.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white; "
@@ -67,7 +88,9 @@ public class ChooseGameController {
 				+ "-fx-background-radius: 10; -fx-cursor: hand;");
 	}
 
-	// added hover effect
+	/**
+	 * THIS handles the hover enter effect on Nerdle button.
+	 */
 	@FXML
 	private void nerdleHoverEnter(MouseEvent event) {
 		nerdleButton.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white; "
@@ -75,6 +98,9 @@ public class ChooseGameController {
 				+ "-fx-background-radius: 10; -fx-cursor: hand;");
 	}
 
+	/**
+	 * THIS handles the hover exit effect on Nerdle button.
+	 */
 	@FXML
 	private void nerdleHoverExit(MouseEvent event) {
 		nerdleButton.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white; "
