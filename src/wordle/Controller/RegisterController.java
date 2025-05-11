@@ -15,22 +15,25 @@ import wordle.Util.AlertUtil;
 import wordle.Service.*;
 import java.io.*;
 
-
+/**
+ * Controller class for the user registration view.
+ * Handles registering new users and navigating to the login screen.
+ */
 public class RegisterController {
 
-    @FXML
-    private TextField usernameField;
-
-    @FXML
-    private PasswordField passwordField;
-    
-    @FXML
-    private Button registerButton;
-    
+    // FXML fields for user inputs and buttons
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button registerButton;
     @FXML Button loginButton;
 
+    
 
-
+    /**
+     * Handles user registration logic when the "Register" button is clicked.
+     * Validates inputs, registers the user using PlayerRepository,
+     * and redirects to the login screen upon success.
+     */
  @FXML
     private void handleRegister(ActionEvent evt) throws IOException {
         String u = usernameField.getText().trim();
@@ -42,14 +45,16 @@ public class RegisterController {
         }
 
         try {
+        	// Attempt to register the user
             PlayerRepository.register(u, p);
             AlertUtil.info("Success", "Registered " + u);
         } catch (IllegalArgumentException ex) {
+        	// Show error if user already exists
             AlertUtil.warn("Duplicate Error", ex.getMessage());
             return;
         }
 
-        // go to login
+        // Navigate to login screen
         FXMLLoader loader = new FXMLLoader(
             getClass().getResource("/wordle/View/LoginView.fxml")
         );
@@ -57,7 +62,10 @@ public class RegisterController {
         stage.setScene(new Scene(loader.load()));
     }
 
-    
+
+ /**
+  * Navigates back to the login screen wehn the "Login" button is clicked.
+  */
     @FXML
     private void handleLogin(ActionEvent event) {
         try {
