@@ -18,17 +18,25 @@ import wordle.Util.AlertUtil;
 import java.io.*;
 
 
+/**
+ * controller for handling the login screen logic.
+ * supports login with username and password, guest login, navigation to register screen, and help screen.
+ */
 public class LoginController {
 
+	// FXML controls
     @FXML private TextField    usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
     @FXML private Button registerButton;
     @FXML private Button guestButton;
     @FXML private Button btnOpenHelp;
-
  
-    /** Fired when the user clicks LOGIN */
+    /**
+     * handles user login using username and password
+     * if successful, stores the player in the session and loads the main Choose Game view.
+     * If failed, shows a warning.
+     */
     @FXML
     private void handleLogin(ActionEvent evt) {
     	PlayerRepository.printPlayers();
@@ -74,6 +82,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * navigates the user to the Register screen.
+     */
     @FXML
     private void handleGoToRegister(ActionEvent evt) throws IOException {
         Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
@@ -83,7 +94,10 @@ public class LoginController {
         stage.setScene(new Scene(root));
     }
 
-    /** Fired when the user clicks Continue as Guest */
+    /**
+     * Handles "Continue as Guest" button click.
+     * Navigates directly to the game view without saving scores.
+     */
     @FXML
     private void handleGuest(ActionEvent e) {
         // TODO: load guest view or game directly
@@ -112,6 +126,9 @@ public class LoginController {
         }
     }
     
+    /**
+     * Opens the Helo View when the Help button is clicked.
+     */
     @FXML
     private void openHelpHandler(ActionEvent e) {
 		try {
