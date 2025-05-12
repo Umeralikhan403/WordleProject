@@ -17,7 +17,7 @@ public class GameService {
     private Map<Integer, List<String>> wordsByLength;  // Map to store words by their length
     private List<String> currentWordsList;  // Words of current selected length
     private List<String> equationList;
-    private String targetEquation;
+    private static String targetEquation;
     private int currentWordLength = 5;  // Default word length
     private final Random random = new Random();
     
@@ -120,10 +120,11 @@ public class GameService {
             System.err.println(">>>>> ERROR loading nerdle_equations.txt: " + e.getMessage());
         }
     }
-
-    public String getTargetEquation() {
+    
+    public static String getTargetEquation() {
         return targetEquation;
     }
+
 
     // Validate equation by evaluating left side and comparing with right side
     public boolean isValidEquation(String input) {

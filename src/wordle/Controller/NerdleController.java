@@ -47,7 +47,7 @@ public class NerdleController implements Initializable {
 	private int attemptNumber = 0;
 	private int currentDigitIndex = 0;
 	private final GameService gameService = new GameService();
-	private String equationTarget;
+	private static String equationTarget;
 	private boolean gameOver = false;
 
 	/**
@@ -104,6 +104,10 @@ public class NerdleController implements Initializable {
 				});
 			});
 		}).start();
+	}
+	
+	public static String getTargetEquation() {
+	    return equationTarget;
 	}
 
 	/**

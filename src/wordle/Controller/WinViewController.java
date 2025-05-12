@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import wordle.Service.GameService;
 import wordle.Util.AlertUtil;
 
 /**
@@ -50,23 +51,35 @@ public class WinViewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-		int attempts = WordleViewController.getAttemptNumber() + 1;
-		String word = WordleViewController.getTargetedWord();
-		System.out.println(word);
-		// Check if this is a win or lose view by checking which labels exist
-		if (lblAttempts != null) {
-			// Win view
-			lblAttempts.setText("You completed the game in " + attempts + " attempts.");
-		}
-				
-		// This is common for both views
-		if (lblComplete != null) {
-			lblComplete.setText("The word was: " + word + ".");
-					
-			lblComplete.setWrapText(true);
-			lblComplete.setPrefWidth(400); // Make sure it's wide enough
-		}
+	    int attempts = WordleViewController.getAttemptNumber() + 1;
+	    int gameType = ChooseGameController.getGameType();
+	    String finalAnswer = "";
+
+	    if (gameType == 1) { // Wordle
+	        finalAnswer = WordleViewController.getTargetedWord();
+	        if (lblAttempts != null) {
+	            lblAttempts.setText("You completed the game in " + attempts + " attempts.");
+	        }
+	        if (lblComplete != null) {
+	            lblComplete.setText("The word was: " + finalAnswer + ".");
+	        }
+	    } else if (gameType == 2) { // Nerdle
+	    	finalAnswer = NerdleController.getTargetEquation();
+	        if (lblAttempts != null) {
+	            lblAttempts.setText("You completed the game in " + attempts + " attempts.");
+	        }
+	        if (lblComplete != null) {
+	            lblComplete.setText("The equation was: " + finalAnswer + ".");
+	        }
+	    }
+
+	    // Ensure proper formatting
+	    if (lblComplete != null) {
+	        lblComplete.setWrapText(true);
+	        lblComplete.setPrefWidth(400);
+	    }
 	}
+
 	
 	/**
 	 * The game will restart when the user clicks the Play Again button.
