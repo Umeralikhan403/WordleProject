@@ -179,14 +179,38 @@ public class NerdleController implements Initializable {
 		if (!isProperEquationSyntax(guessEquation)) {
 			System.out.println(">>>> Invalid Syntax!");
 
-			for (int i = 0; i < 8; i++) {
-				row[attemptNumber][i]
-						.setStyle("-fx-background-color: #FF5C5C; -fx-border-color: #FF0000; -fx-border-width: 2; "
-								+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
-								+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;");
+			// showing the invalid on the screen
+			attemptLabel.setText("Invalid equation!");
+
+			// Blink red background on current row, 3 times
+			javafx.animation.Timeline timeline = new javafx.animation.Timeline();
+			for (int i = 0; i < 6; i++) { 
+				int step = i;
+				timeline.getKeyFrames().add(new javafx.animation.KeyFrame(
+					javafx.util.Duration.seconds(i * 0.3),
+					e -> {
+						for (int j = 0; j < 8; j++) {
+							row[attemptNumber][j].setStyle(step % 2 == 0
+								? "-fx-background-color: #FF5C5C; -fx-border-color: #FF0000; -fx-border-width: 2;"
+								+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32;"
+								+ "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;"
+								: "-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-width: 2;"
+								+ "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32;"
+								+ "-fx-font-weight: bold; -fx-text-fill: black; -fx-background-radius: 10; -fx-border-radius: 10;");
+						}
+					}
+				));
 			}
+			
+			// Reset label after blinking
+			timeline.setOnFinished(e -> updateAttemptNumber()); 
+			
+			timeline.play();
+
 			return;
 		}
+
+
 
 		String target = equationTarget;
 		char[] targetChars = target.toCharArray();
