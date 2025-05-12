@@ -18,6 +18,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import wordle.Util.AlertUtil;
 
+/**
+ * This class is the controller for the WinView.fxml file.
+ * It handles the logic for the winning screen.
+ * 
+ * @author 
+ */
 public class WinViewController implements Initializable {
 
 	@FXML private Button btnAgain;
@@ -35,26 +41,31 @@ public class WinViewController implements Initializable {
 	@FXML private Label lblAttemptsFailed;
 	@FXML private Label lblTryAgain;
 	
+	/**
+	 * This method is called when the FXML file is loaded.
+	 * It initialises the labels with the number of attempts that were made as well as the correct word.
+	 * 
+	 * @param url The URL of the FXML file.
+	 * @param resourceBundle The resource bundle for localisation.
+	 */
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
 		int attempts = WordleViewController.getAttemptNumber() + 1;
 		String word = WordleViewController.getTargetedWord();
 		System.out.println(word);
 		// Check if this is a win or lose view by checking which labels exist
-				if (lblAttempts != null) {
-					// Win view
-					lblAttempts.setText("You completed the game in " + attempts + " attempts.");
-				}
+		if (lblAttempts != null) {
+			// Win view
+			lblAttempts.setText("You completed the game in " + attempts + " attempts.");
+		}
 				
-				// This is common for both views
-				if (lblComplete != null) {
-					lblComplete.setText("The word was: " + word + ".");
+		// This is common for both views
+		if (lblComplete != null) {
+			lblComplete.setText("The word was: " + word + ".");
 					
-					  lblComplete.setWrapText(true);
-				      lblComplete.setPrefWidth(400); // Make sure it's wide enough
-				}
-//		lblAttempts.setText("You completed the game in " + attempts + " attempts.");
-//		lblComplete.setText("The word was: " + word + ".");
+			lblComplete.setWrapText(true);
+			lblComplete.setPrefWidth(400); // Make sure it's wide enough
+		}
 	}
 	
 	/**
