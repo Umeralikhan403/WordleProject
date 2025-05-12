@@ -3,13 +3,10 @@ package testing;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import wordle.Models.GameResult;
 import wordle.Models.GameStatus;
 import wordle.Models.GameType;
-import wordle.Models.Player;
-import wordle.Service.GameService;
 
 class GameResultTest {
 
