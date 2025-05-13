@@ -55,6 +55,11 @@ public class WordleViewController implements Initializable {
     private int maxAttempts = 6; // Default max attempts
     private int wordLength = 5; // Default word length
 
+    /**
+	 * Initialises the controller and sets up the game, generating a word to guess and setting up the grid.
+	 * @param url - The URL location of the FXML file.
+	 * @param resourceBundle - The resource bundle for localisation.
+	 */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         attemptNumber = 0;
@@ -98,6 +103,9 @@ public class WordleViewController implements Initializable {
     }
 
     // Setup word length selector
+    /**
+     * Sets up the word length selector with available options.
+     */
     private void setupWordLengthSelector() {
         // Get available word lengths from the service
     	wordLengthSelector.setItems(FXCollections.observableArrayList(
@@ -117,6 +125,10 @@ public class WordleViewController implements Initializable {
     }
     
     // Change word length and reset the game
+    /**
+	 * Change the word length and reset the game.
+	 * @param newLength - The new word length selected by the user.
+	 */
     private void changeWordLength(int newLength) {
         if (newLength != wordLength) {
             wordLength = newLength;
@@ -137,6 +149,9 @@ public class WordleViewController implements Initializable {
     }
     
     // Reset game state
+    /**
+	 * Resets the game state for a new game.
+	 */
     private void resetGame() {
         attemptNumber = 0;
         currentLetterIndex = 0;
@@ -145,6 +160,9 @@ public class WordleViewController implements Initializable {
     }
 
     // Create and set up a dynamic grid based on word length
+    /**
+     * Sets up the dynamic grid based on the selected word length.
+     */
     private void setupDynamicGrid() {
         // Clear existing grid
         wordleGrid.getChildren().clear();
@@ -171,13 +189,26 @@ public class WordleViewController implements Initializable {
     }
 
     // Update attempt text
+    /**
+	 * Update the attempt label and remaining attempts label.
+	 */
     private void updateLettersSelected() {
         attemptLabel.setText((attemptNumber + 1) + "/" + maxAttempts);
         int rem = maxAttempts - attemptNumber;
-        remainingAttemptsLabel.setText(rem + " attempt" + (rem > 1 ? "s" : "") + " remaining");
+        if (attemptNumber - 1 == maxAttempts) {
+			remainingAttemptsLabel.setText(rem + " attempt" + (rem > 1 ? "s" : "") + " remaining");
+			remainingAttemptsLabel.setStyle("-fx-text-fill: red;");
+		} else {
+			remainingAttemptsLabel.setText(rem + " attempt" + (rem > 1 ? "s" : "") + " remaining");
+		}
+        //remainingAttemptsLabel.setText(rem + " attempt" + (rem > 1 ? "s" : "") + " remaining");
     }
 
     // Handle key press
+    /**
+     * Handles key press events.
+     * @param key - The key on the keyboard that was pressed.
+     */
     private void handleKeyPress(KeyCode key) {
         System.out.println(">>>>> key handling : " + key + ", attempt no. " + attemptNumber + ", letter index is: "
                 + currentLetterIndex);
@@ -197,6 +228,9 @@ public class WordleViewController implements Initializable {
     }
 
     // Main function of the game
+    /**
+	 * Check the result of the current guess.
+	 */
     private void checkResult() {
         StringBuilder guessBuilder = new StringBuilder();
         for (int i = 0; i < wordLength; i++) {
@@ -292,7 +326,12 @@ public class WordleViewController implements Initializable {
             overGame = true;
         }
     }
-
+    
+    /**
+	 * Opens the menu view when the menu button is clicked.
+	 * @param e - The ActionEvent triggered by the button click.
+	 * @throws IOException if there is an error loading the FXML file.
+	 */
     @FXML
     private void openMenuHandler(ActionEvent e) throws IOException {
         // Load the menu view
@@ -301,6 +340,10 @@ public class WordleViewController implements Initializable {
         stage.setScene(new Scene(root));
     }
 
+    /**
+     * Opens the win view when the game is won.
+     * @throws IOException if there is an error loading the FXML file.
+     */
     private void openWinViewHandler() throws IOException {
         // Load the win view using any node from the scene to get the stage
         Stage stage = (Stage) wordleGrid.getScene().getWindow();
@@ -308,6 +351,10 @@ public class WordleViewController implements Initializable {
         stage.setScene(new Scene(root));
     }
 
+    /**
+	 * Opens the lose view when the game is over.
+	 * @throws IOException if there is an error loading the FXML file.
+	 */
     private void openLoseViewHandler() throws IOException {
         // Load the lose view using any node from the scene to get the stage
         Stage stage = (Stage) wordleGrid.getScene().getWindow();
@@ -316,6 +363,10 @@ public class WordleViewController implements Initializable {
     }
 
     // Recording scores
+    /**
+	 * Record and persist the game result.
+	 * @param won - Indicates if the game was won or lost.
+	 */
     private void recordAndPersistResult(boolean won) {
         Player me = Session.getCurrentPlayer();
         // attemptsUsed = attemptNumber+1 if you zero-index attempts
@@ -328,34 +379,57 @@ public class WordleViewController implements Initializable {
     }
     
     // This method is used to get the number of attempts
+    /**
+     * Get the number of attempts.
+     * @return attemptNumber - The number of attempts made.
+     */
     public static int getAttemptNumber() {
         return attemptNumber;
     }
     
     // This method is used to get the targeted word
+    /**
+	 * Get the targeted word.
+	 * @return targettedWord - The targeted word.
+	 */
     public static String getTargetedWord() {
         return targettedWord;
     }
 
     // Styling the rows based on the result
+    /**
+	 * Style for correct letters.
+	 * @return The CSS style string for correct letters.
+	 */
     private String correctStyle() {
         return "-fx-background-color: #209702; -fx-border-color: #209702; -fx-border-width: 2; "
                 + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
                 + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
     }
 
+    /**
+     * Style for partially correct letters.
+     * @return The CSS style string for partially correct letters.
+     */
     private String partialStyle() {
         return "-fx-background-color: #E2DA00; -fx-border-color: #E2DA00; -fx-border-width: 2; "
                 + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
                 + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
     }
 
+    /**
+	 * Style for incorrect letters.
+	 * @return The CSS style string for incorrect letters.
+	 */
     private String wrongStyle() {
         return "-fx-background-color: #878787; -fx-border-color: #878787; -fx-border-width: 2; "
                 + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
                 + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
     }
     
+    /**
+     * Shows feedback when an invalid word is entered.
+     */
     private void showInvalidWordFeedback() {
         // Flash effect using a timeline
         Timeline timeline = new Timeline(
@@ -385,12 +459,20 @@ public class WordleViewController implements Initializable {
         });
     }
     
+    /**
+     * Style for invalid word input.
+     * @return The CSS style string for invalid word input.
+     */
     private String invalidWordStyle() {
         return "-fx-background-color: #FF5252; -fx-border-color: #FF0000; -fx-border-width: 2; "
                 + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
                 + "-fx-font-weight: bold; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;";
     }
 
+    /**
+     * Default style for the cells.
+     * @return The CSS style string for the default cell appearance.
+     */
     private String defaultStyle() {
         return "-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-width: 2; "
                 + "-fx-min-width: 62; -fx-min-height: 62; -fx-alignment: center; -fx-font-size: 32; "
