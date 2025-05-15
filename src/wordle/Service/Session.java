@@ -3,28 +3,29 @@ package wordle.Service;
 import wordle.Models.Player;
 
 /**
- * The session class class manages the current user's session.
- * It stores and provides access to the currently logged-in player across the application.
+ * This class handles the session of the current player.
+ * It stores the current player in a static variable.
  */
 public class Session {
-	// Holds the currently authenticated player
 	private static Player currentPlayer;
 
 	/**
-     * Sets the currently logged-in player.
-     * 
-     * @param p the Player object to set as the current user
-     */
+	 * This method sets the current player.
+	 * @param p - the current player signed in
+	 */
     public static void setCurrentPlayer(Player p) {
         currentPlayer = p;
     }
 
     /**
-     * Returns the currently logged-in player.
-     * 
-     * @return the current Player object
+     * This method returns the current player.
+     * @return currentPlayer - the current player signed in
      */
     public static Player getCurrentPlayer() {
         return currentPlayer;
     }
+    
+    public static void signOut() {
+		currentPlayer = null;
+	}
 }
