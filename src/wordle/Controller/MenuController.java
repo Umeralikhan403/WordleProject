@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
@@ -92,12 +93,22 @@ public class MenuController implements Initializable {
 	private void resetScoresHandler(ActionEvent e) {
 		 alertDialogBuilder(AlertType.CONFIRMATION, "Reset Scores", "Confirmation",
 				"Are you sure you want to reset the scores?");
-		if (Session.getCurrentPlayer() != null) {
-			Session.getCurrentPlayer().resetScores();
-			AlertUtil.info("Reset Scores", "Scores have been reset.");
-		} else {
-			AlertUtil.warn("Reset Scores", "No player is currently logged in.");
-		}
+		 Alert alert = new Alert(AlertType.CONFIRMATION);
+		 alert.setTitle("Reset Scores");
+		 alert.setHeaderText("Confirmation");
+		 alert.setContentText("Are you sure you want to reset the scores?");
+		 alert.showAndWait().ifPresent(response -> {
+			 if (response == ButtonType.OK) {
+				 if (Session.getCurrentPlayer() != null) {
+						Session.getCurrentPlayer().resetScores();
+						AlertUtil.info("Reset Scores", "Scores have been reset.");
+					} else {
+						AlertUtil.warn("Reset Scores", "No player is currently logged in.");
+					}
+			 } else {
+				 alert.close();
+			 }
+		 });
 	}
 	
 	/**
@@ -106,15 +117,27 @@ public class MenuController implements Initializable {
 	 */
 	@FXML
 	private void signOutHandler(ActionEvent e) {
-		alertDialogBuilder(AlertType.CONFIRMATION, "Sign Out", "Confirmation", "Are you sure you want to sign out?");
-		try {
-			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/loginView.fxml"));
-			stage.setScene(new Scene(root));
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			AlertUtil.warn("Navigation Error", "Login view failed to load.");
-		}
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Sign Out");
+		alert.setHeaderText("Confirmation");
+		alert.setContentText("Are you sure you want to sign out?");
+		alert.showAndWait().ifPresent(response -> {
+			if (response == ButtonType.OK) {
+				Session.signOut();
+				try {
+					Session.signOut();
+					System.out.println("Signed out");
+					Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+					Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/loginView.fxml"));
+					stage.setScene(new Scene(root));
+				} catch (IOException ex) {
+					ex.printStackTrace();
+					AlertUtil.warn("Navigation Error", "Login view failed to load.");
+				}
+			} else {
+				alert.close();
+			}
+		});
 	}
 	
 	/**
