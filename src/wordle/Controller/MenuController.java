@@ -17,6 +17,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import wordle.Models.GameType;
 import wordle.Service.Session;
 import wordle.Util.AlertUtil;
 
@@ -58,11 +59,11 @@ public class MenuController implements Initializable {
 	 */
 	@FXML
 	private void closeMenuHandler(ActionEvent e) throws IOException {
-		if (ChooseGameController.getGameType() == 1) {
+		if (ChooseGameController.getGameType() == GameType.WORDLE) {
 			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/WordleView.fxml"));
 			stage.setScene(new Scene(root));
-		} else if (ChooseGameController.getGameType() == 2) {
+		} else if (ChooseGameController.getGameType() == GameType.NERDLE) {
 			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 			Parent root = FXMLLoader.load(getClass().getResource("/wordle/View/NerdleView.fxml"));
 			stage.setScene(new Scene(root));

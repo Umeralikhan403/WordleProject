@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import wordle.Models.GameType;
 import javafx.event.ActionEvent;
 
 /**
@@ -24,7 +25,7 @@ public class ChooseGameController {
 	@FXML
 	private Button nerdleButton;
 
-	private static int gameType;
+	private static GameType gameType;
 
 	/**
 	 * THIS Handles starting the Wordle game. Loads the Wordle game view and sets
@@ -37,7 +38,7 @@ public class ChooseGameController {
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.setScene(new Scene(root));
 			stage.show();
-			gameType = 1; // Wordle
+			gameType = GameType.WORDLE; // Wordle
 			// Set the menu view for Wordle
 			// Scene menuScene =
 			// FXMLLoader.load(getClass().getResource("/wordle/View/MenuView.fxml"));
@@ -58,13 +59,13 @@ public class ChooseGameController {
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.setScene(new Scene(root));
 			stage.show();
-			gameType = 2; // Nerdle
+			gameType = GameType.NERDLE; // Nerdle
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static int getGameType() {
+	public static GameType getGameType() {
 		return gameType;
 	}
 

@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import wordle.Models.GameType;
 import wordle.Service.GameService;
 import wordle.Util.AlertUtil;
 
@@ -52,10 +53,10 @@ public class WinViewController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
 	    int attempts = WordleViewController.getAttemptNumber() + 1;
-	    int gameType = ChooseGameController.getGameType();
+	    GameType gameType = ChooseGameController.getGameType();
 	    String finalAnswer = "";
 
-	    if (gameType == 1) { // Wordle
+	    if (gameType == GameType.WORDLE) { // Wordle
 	        finalAnswer = WordleViewController.getTargetedWord();
 	        if (lblAttempts != null) {
 	            lblAttempts.setText("You completed the game in " + attempts + " attempts.");
@@ -63,7 +64,7 @@ public class WinViewController implements Initializable {
 	        if (lblComplete != null) {
 	            lblComplete.setText("The word was: " + finalAnswer + ".");
 	        }
-	    } else if (gameType == 2) { // Nerdle
+	    } else if (gameType == GameType.NERDLE) { // Nerdle
 	    	finalAnswer = NerdleController.getTargetEquation();
 	        if (lblAttempts != null) {
 	            lblAttempts.setText("You completed the game in " + attempts + " attempts.");
