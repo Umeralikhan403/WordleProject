@@ -25,7 +25,7 @@ A JavaFX-based desktop application that allows users to play two classic word-ba
 ## 🛠 Installation
 
 1. **Clone the repository**
-   git clone https://github.com/your-team/wordle-nerdle-game.git
+   git clone https://github.com/Umeralikhan403/WordleProject.git
 
 2. Open the project in an IDE that supports JavaFX (e.g., IntelliJ IDEA or Eclipse).
 3. Ensure Java 11 or higher is installed.
